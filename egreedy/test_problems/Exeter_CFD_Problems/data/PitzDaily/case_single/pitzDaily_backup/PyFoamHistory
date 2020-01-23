@@ -1,0 +1,9 @@
+Fri Aug  9 14:32:25 2019 by gad212 in ennui :Application: Runner used by sample_script.py  | with cwd /secamfs/userspace/staff/gad212/batchopt/cfd_test_problem_suite  |  Starting 
+Fri Aug  9 14:32:26 2019 by gad212 in ennui :Application: Runner used by sample_script.py  | with cwd /secamfs/userspace/staff/gad212/batchopt/cfd_test_problem_suite  |  Ended 
+Fri Aug  9 14:32:26 2019 by gad212 in ennui :Application: Runner used by sample_script.py  | with cwd /secamfs/userspace/staff/gad212/batchopt/cfd_test_problem_suite  |  Starting 
+Fri Aug  9 14:32:27 2019 by gad212 in ennui :Application: Runner used by sample_script.py  | with cwd /secamfs/userspace/staff/gad212/batchopt/cfd_test_problem_suite  |  Ended 
+Fri Aug  9 14:32:27 2019 by gad212 in ennui :Application: Runner used by sample_script.py  | with cwd /secamfs/userspace/staff/gad212/batchopt/cfd_test_problem_suite  |  Starting 
+Fri Aug  9 14:32:28 2019 by gad212 in ennui :Application: Runner used by sample_script.py  | with cwd /secamfs/userspace/staff/gad212/batchopt/cfd_test_problem_suite  |  Ended 
+Fri Aug  9 14:32:28 2019 by gad212 in ennui :Application: pyFoamCopyLastToFirst.py . .  | with cwd /secamfs/userspace/staff/gad212/batchopt/cfd_test_problem_suite/Exeter_CFD_Problems/data/PitzDaily/case_single  |  From /secamfs/userspace/staff/gad212/batchopt/cfd_test_problem_suite/Exeter_CFD_Problems/data/PitzDaily/case_single/0 to /secamfs/userspace/staff/gad212/batchopt/cfd_test_problem_suite/Exeter_CFD_Problems/data/PitzDaily/case_single/0 
+Fri Aug  9 14:32:29 2019 by gad212 in ennui :Application: pyFoamClearCase.py .  | with cwd /secamfs/userspace/staff/gad212/batchopt/cfd_test_problem_suite/Exeter_CFD_Problems/data/PitzDaily/case_single  |  
+Fri Aug  9 14:32:29 2019 by gad212 in ennui :Application: CloneCase used by sample_script.py  | with cwd /secamfs/userspace/staff/gad212/batchopt/cfd_test_problem_suite  |  Cloned to Exeter_CFD_Problems/data/PitzDaily/case_single/pitzDaily_backup 

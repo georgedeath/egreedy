@@ -1,0 +1,33 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  5.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : 5.x-7f7d351b741b
+Exec   : calcPressureDifference -case Exeter_CFD_Problems/data/PitzDaily/case_single/ -latestTime
+Date   : Aug 09 2019
+Time   : 14:34:54
+Host   : "ennui"
+PID    : 23555
+I/O    : uncollated
+Case   : Exeter_CFD_Problems/data/PitzDaily/case_single
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+Time = 0
+Reading pressure
+
+Reading velocity
+
+    Pressure drop = 0.0818917651628 between inlet and outlet
+End
+

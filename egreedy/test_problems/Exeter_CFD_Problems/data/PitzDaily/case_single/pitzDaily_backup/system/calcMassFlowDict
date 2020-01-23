@@ -1,0 +1,38 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.0                                   |
+|   \\  /    A nd           | Web:      http://www.openfoam.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+
+    root	    ".";
+    case 	    "test";
+    instance        "system";
+    local           "";
+
+    class           dictionary;
+    object          sampleDict;
+}
+
+// ************************************************************************* //
+
+// Patches through which to calculate the mass flow
+patchNames
+(
+	inlet
+	outlet
+);
+
+// Factor to multiply the results with (for symmetric or axial cases)
+// scaleFactor 72.;
+
+// Density for incompressible cases
+// rho rho [1 -3 0 0 0 0 0] 0.41;
+
+// ************************************************************************* //
