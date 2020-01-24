@@ -14,7 +14,8 @@ def perform_experiment(problem_name,
                        acquisition_args={},
                        budget=250,
                        continue_runs=False,
-                       verbose=False):
+                       verbose=False,
+                       save=True):
     r"""Performs a Bayesian optimisation experiment.
 
     Performs Bayesian optimisation on a specified problem with given
@@ -68,6 +69,8 @@ def perform_experiment(problem_name,
     verbose : bool
         Prints information relating to the optimisation procedure as the
         algorithm progresses.
+    save : bool
+        Whether the optimisation run should be saved.
 
     Raises
     ------
@@ -187,7 +190,8 @@ def perform_experiment(problem_name,
         Ytr = np.concatenate((Ytr, np.atleast_2d(Ynew)))
 
         # save the current training data
-        np.savez(save_file, Xtr=Xtr, Ytr=Ytr)
+        if save:
+            np.savez(save_file, Xtr=Xtr, Ytr=Ytr)
 
         _print('Best function value so far: {:g}'.format(np.min(Ytr)), verbose)
         _print('', verbose)
@@ -277,7 +281,7 @@ def perform_BO_iteration(Xtr, Ytr, f, acq_func, verbose=False):
             return Xnew, Ynew
 
         except KeyboardInterrupt:
-            _print('Interrupted with CTRL+C - stopping run', verbose) 
+            _print('Interrupted with CTRL+C - stopping run', verbose)
             raise
 
         except:
@@ -309,5 +313,6 @@ if __name__ == "__main__":
                        'eFront',  # method name
                        verbose=True,  # print status
                        continue_runs=False,  # resume runs
+                       save=False,  # whether to save the run
                        acquisition_args={'epsilon': 0.22}  # acq func args
                        )

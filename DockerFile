@@ -4,11 +4,15 @@ USER root
 ENV DEBIAN_FRONTEND noninteractive
 
 # gcc+ etc
-RUN apt-get update && apt-get install -y --no-install-recommends build-essential
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential git \
+    && apt-get clean \
+    && rm -r /var/lib/apt/lists/*
 
 # install miniconda
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 RUN bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda
+RUN rm Miniconda3-latest-Linux-x86_64.sh
 ENV PATH="$HOME/miniconda/bin:$PATH"
 
 # python libs
@@ -18,7 +22,7 @@ RUN conda clean -ya
 RUN pip install nlopt pyDOE2 pygame box2d-py GPy pyfoam numpy-stl
 
 # copy over the project
-COPY . /egreedy
+RUN git clone https://bitbucket.org/georgedeath/egreedy/ /egreedy
 
 # compile the pitzdaily solvers
 SHELL ["/bin/bash", "-c"]
