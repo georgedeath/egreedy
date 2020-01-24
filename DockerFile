@@ -21,6 +21,9 @@ RUN conda install -y pygmo --channel conda-forge
 RUN conda clean -ya
 RUN pip install nlopt pyDOE2 pygame box2d-py GPy pyfoam numpy-stl
 
+# force the rest of the file to be reran by docker
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+
 # copy over the project
 RUN git clone https://bitbucket.org/georgedeath/egreedy/ /egreedy
 

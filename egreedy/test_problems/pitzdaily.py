@@ -108,7 +108,7 @@ class PitzDailyProblem(object):
         sys.argv = sys.argv[:1]
 
         # directory containing the problem info
-        ddir = os.path.abspath(os.path.join(os.path.dirname(__file__), 
+        ddir = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                             'Exeter_CFD_Problems/data/'))
 
         # create a temporary directory for the CFD run
@@ -139,3 +139,19 @@ class PitzDailyProblem(object):
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         self.temp_dir_object.cleanup()
+
+
+if __name__ == "__main__":
+    # Check the test problem can be called (i.e. test OpenFOAM)
+
+    # instantiate the test problem
+    f = PitzDaily()
+    print('PitzDaily successfully instantiated..')
+
+    # generate a valid solution
+    x = f.generate_valid_solution()
+    print('Generated valid solution, evaluating..')
+
+    # evaluate
+    fx = f(x)
+    print('Fitness value:', fx)
