@@ -11,11 +11,11 @@ The reposity also contains all training data used for the initialisation of each
 The remainder of this document details:
 - The steps needed to install the package and related python modules on your system: [docker](###installation-docker) / [manual](###installation-manual)
 - The format of the [training data](###training-data) and [saved runs](###optimisation-results).
-- How to repeat the experiments.
+- How to [repeat the experiments](###reproduce-experiments).
 - How to add your own acquisition functions and test problems.
 
 ### Installation (docker)
-The easiest method to automatically configure and the optimisation library to repeat the experiments carried out in this work is to use [docker](http://www.docker.com). Install instructions for docker for many popular operating systems are can be found [here](https://docs.docker.com/install/). Once docker has been installed, the docker container can be download and ran as follows:
+The easiest method to automatically set up the enviroment needed for the optimisation library to run and to repeat the experiments carried out in this work is to use [docker](http://www.docker.com). Install instructions for docker for many popular operating systems are can be found [here](https://docs.docker.com/install/). Once docker has been installed, the docker container can be download and ran as follows:
 ```bash
 > # download the docker container
 > docker pull georgedeath/egreedy
@@ -110,3 +110,61 @@ The following example loads the first optimisation run on the Branin test proble
 >>> Xtr.shape, Ytr.shape
 ((250, 2), (250, 1))
 ```
+
+### Reproduce experiments
+The python file `run_experiment.py` provides a convenient way to reproduce an individual experimental evaluation carried out the paper. It has the following syntax:
+```
+> python run_experiment.py -h
+usage: run_experiment.py [-h] -p PROBLEM_NAME -b BUDGET -r RUN_NO -a
+                         ACQUISITION_NAME
+                         [-aa ACQUISITION_ARGS [ACQUISITION_ARGS ...]]
+
+egreedy optimisation experimental evaluation
+--------------------------------------------
+Example:
+    Running the ePF method on the Branin test function with the training data
+    "1" for a budget (including 2*D training points) of 250 and with a value
+    of epsilon = 0.1 :
+    > python run_experiment.py -p Branin -b 250 -r 1 -a eFront -aa epsilon:0.1
+
+    Running EI on push4 method (note the lack of -aa argument):
+    > python run_experiment.py -p push4 -b 250 -r 1 -a EI
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -p PROBLEM_NAME       Test problem name. e.g. Branin, logGSobol
+  -b BUDGET             Budget. Default: 250 (including training points). Note
+                        that the corresponding npz file containing the initial
+                        training locations must exist in the "training_data"
+                        directory.
+  -r RUN_NO             Run number
+  -a ACQUISITION_NAME   Acquisition function name. e.g: Explore, EI, PI UCB,
+                        PFRandom, eRandom (e-RS), eFront (e-PF) or Exploit
+  -aa ACQUISITION_ARGS [ACQUISITION_ARGS ...]
+                        Acquisition function parameters, must be in pairs of
+                        parameter:values, e.g. for the e-greedy methods:
+                        epsilon:0.1 [Note: optional]
+```
+Similarly, `run_all_experiments.py` provides an easy interface run **all** experiments for a specific set of test problems, either the synthetic, robot pushing or pipe shape optimisation, in the following manner:
+```
+> python run_all_experiments.py -h
+usage: run_all_experiments.py [-h] {synthetic,robot,pitzdaily}
+
+Evaluate all methods on a set of functions.
+--------------------------------------------
+Examples:
+    Evaluate all methods in the paper on the synthetic functions:
+    > python run_all_experiments.py -f synthetic
+
+    Evaluate all methods in the paper on the robot pushing functions:
+    > python run_all_experiments.py -f robot
+
+    Evaluate all methods in the paper on the PitzDaily test function:
+    (Note that this can only be performed if OpenFOAM has been set up correctly)
+    > python run_all_experiments.py -f pitzdaily
+
+positional arguments:
+  {synthetic,robot,pitzdaily}
+                        Set of test problems to evaluate.
+```
+
