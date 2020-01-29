@@ -39,15 +39,16 @@ Optimising the acquisition function.
 ..
 ```
 
-
 ### Installation (manual)
-Manual installation is straight-forward for the optimisation library apart from the configuration of the PitzDaily test problem due to the installation and compilation of [OpenFOAM®](http://www.openfoam.com). Note that if you do not wish to use the PitzDaily test problem then the library will work fine without the optional instructions included at the end of this section. The following instructions will assuume that [Anaconda3](https://docs.anaconda.com/anaconda/install/) has been installed and that you are running the following commands from the command prompt/console.
+Manual installation is straight-forward for the optimisation library apart from the configuration of the PitzDaily test problem due to the installation and compilation of [OpenFOAM®](http://www.openfoam.com). Note that if you do not wish to use the PitzDaily test problem then the library will work fine without the optional instructions included at the end of this section. The following instructions will assuume that [Anaconda3](https://docs.anaconda.com/anaconda/install/) has been installed and that you are running the following commands from the command prompt/console:
 
 ```bash
 > conda install -y scipy numpy matplotlib statsmodels swig jupyter
 > conda install -y pygmo --channel conda-forge
 > pip install nlopt pyDOE2 pygame box2d-py GPy numpy-stl
 ```
+Note that, on windows, to install `swig` and `pygame` it may be necessersary to also install [Visual C++ build tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
+
 Once the above python modules have been installed, clone this reposity to a location of your choosing (in the following we assume you are installing to `/egreedy/`) and test that it works (CTRL+C to cancel optimisation run):
 ```bash
 > git clone https://bitbucket.org/georgedeath/egreedy/ /egreedy
@@ -58,7 +59,7 @@ Loaded training data from: training_data/Branin_1.npz
 ```
 PitzDaily (CFD) instructions (**optional, Linux only**) - other test problems will work without this:
 ```
-> pip install pyfoam 
+> pip install pyfoam
 ```
 Now follow the linked instructions to [install OpenFOAM5](https://openfoamwiki.net/index.php/Installation/Linux/OpenFOAM-5.x/Ubuntu) (this will take 30min - 3hours to install). Note that this has only been tested with the Ubuntu 12.04 and 18.04 instructions. Once this has been successfully installed, the command `of5x` has to be ran before the PitzDaily test problem can be evaluated.
 
@@ -103,7 +104,7 @@ The results of all optimisation runs can be found in the `results` directory. Th
 The following example loads the first optimisation run on the Branin test problem with the $\epsilon$-PF method using $\epsilon = 0.1$:
 ```python
 >>> import numpy as np
->>> # load the 
+>>> # load the training data
 >>> with np.load('Branin_1_250_eFront_eps0.1.npz', allow_pickle=True) as data:
 	Xtr = data['Xtr']
 	Ytr = data['Ytr']
@@ -111,7 +112,7 @@ The following example loads the first optimisation run on the Branin test proble
 ((250, 2), (250, 1))
 ```
 
-### Reproduce experiments
+### Reprodution of experiments
 The python file `run_experiment.py` provides a convenient way to reproduce an individual experimental evaluation carried out the paper. It has the following syntax:
 ```
 > python run_experiment.py -h
@@ -167,4 +168,14 @@ positional arguments:
   {synthetic,robot,pitzdaily}
                         Set of test problems to evaluate.
 ```
+### Reproduction of figures and tables in the paper
+The [jupyter](https://jupyter.org) notebook `notebooks/Non_results_figure_generation.ipynb` contains the code to generate the following figures:
+- Figure 1: Showing an example Gaussian process model and its corresponding Pareto front and set.
+- Figure 2: Contours of acquisition function values for EI, UCB and PI.
+- Figure 3: Contours of weighted EI for three values of $\omega$.
+- Figure 1 (Supplementary material): Landscape of the WangFreitas test problem.
 
+The jupyter notebook `notebooks/Process_results_and_generate_figures_for_paper.ipynb` contains the code to load and process the optimisation results (stored in the `results` directory) as well as the code to produce all results figures and tables used in the paper and supplementary material.
+
+### Incorperation of additional test problems and acquisition functions
+The jupyter notebook `notebooks/New_fitness_functions_and_acqusition_functions.ipynb` contains examples and instructions of how to include your own test problems (fitness functions) and acquistions functions.

@@ -234,6 +234,9 @@ def perform_BO_iteration(Xtr, Ytr, f, acq_func, verbose=False):
         Location that has been expensively evaluated
     Ynew : (1, 1) numpy.ndarray
         Function value at ``Xnew``
+    model : GPy.models.GPRegression
+        The trained gp model that was used by the acqusition function to
+        select the next location to expensively evaluate
 
     Raises
     ------
@@ -278,7 +281,7 @@ def perform_BO_iteration(Xtr, Ytr, f, acq_func, verbose=False):
             _print('New location  : {:}'.format(Xnew.ravel()), verbose)
             _print('Function value: {:g}'.format(Ynew.flat[0]), verbose)
 
-            return Xnew, Ynew
+            return Xnew, Ynew, model
 
         except KeyboardInterrupt:
             _print('Interrupted with CTRL+C - stopping run', verbose)
