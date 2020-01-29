@@ -183,7 +183,7 @@ def perform_experiment(problem_name,
 
     # perform the Bayesian optimisation loop
     while Xtr.shape[0] < budget:
-        Xnew, Ynew = perform_BO_iteration(Xtr, Ytr, f, acq_func, verbose)
+        Xnew, Ynew, _ = perform_BO_iteration(Xtr, Ytr, f, acq_func, verbose)
 
         # augment the training data and repeat
         Xtr = np.concatenate((Xtr, np.atleast_2d(Xnew)))
