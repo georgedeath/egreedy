@@ -110,7 +110,7 @@ def NSGA2_pygmo(model, fevals, lb, ub, cf=None):
     nsga2 = pg.algorithm(pg.nsga2(gen=1,
                                   cr=0.8,       # cross-over probability.
                                   eta_c=20.0,   # distribution index (cr)
-                                  m=1/D,        # mutation rate
+                                  m=1 / D,        # mutation rate
                                   eta_m=20.0))  # distribution index (m)
 
     # preallocate the storage of every location and fitness to be evaluated

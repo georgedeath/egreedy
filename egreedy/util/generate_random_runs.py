@@ -32,7 +32,7 @@ def perform_LHS_runs(problem_name, budget=250, n_exp_start=1, n_exp_end=51):
     n_exp_end : int
         Ending number (inclusive) of the experiment.
     """
-    exp_nos = np.arange(n_exp_start, n_exp_end+1)
+    exp_nos = np.arange(n_exp_start, n_exp_end + 1)
 
     # get the function class
     f_class = getattr(test_problems, problem_name)

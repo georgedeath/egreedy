@@ -403,7 +403,7 @@ if __name__ == "__main__":
 
     # push8 example
     x = np.array([-3, -3, 100, (1 / 4) * np.pi,
-                  4, 2.5, 100, (1 /4) * np.pi])
+                  4, 2.5, 100, (1 / 4) * np.pi])
     d = push_8D(x,
                 4, 4,
                 0, -4,

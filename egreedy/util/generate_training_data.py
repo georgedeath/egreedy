@@ -6,7 +6,7 @@ robot pushing tasks (push4 and push8).
 from pyDOE2 import lhs
 
 import numpy as np
-import test_problems
+from .. import test_problems
 
 
 def generate_training_data_LHS(problem_name, n_exp_start=1, n_exp_end=51,
@@ -96,7 +96,7 @@ def generate_training_data_LHS(problem_name, n_exp_start=1, n_exp_end=51,
         Ytr = np.reshape(f(Xtr), (-1, 1))
 
         # save the results
-        fn = f'data/{problem_name:s}_{exp_no:d}.npz'
+        fn = f'training_data/{problem_name:s}_{exp_no:d}.npz'
         np.savez(fn, Xtr, Ytr, opt_args)
         print('Saved: {:s}'.format(fn))
 
@@ -144,7 +144,7 @@ def generate_training_data_PitzDaily(n_exp_start=1, n_exp_end=51,
         Xtr = np.zeros((N_samples, 10))
         Ytr = np.zeros((N_samples, 1))
 
-        fn = f'data/PitzDaily_{exp_no:d}.npz'
+        fn = f'training_data/PitzDaily_{exp_no:d}.npz'
         print('Generating data: {:s}'.format(fn))
 
         # generate and evaluate solutions that do not violate the constraint

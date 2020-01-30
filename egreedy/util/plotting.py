@@ -11,6 +11,7 @@ from scipy.stats import median_absolute_deviation, wilcoxon
 from statsmodels.stats.multitest import multipletests
 from .. import test_problems
 
+
 def process_results(results_dir, problem_names, method_names, budget=250,
                     exp_no_start=1, exp_no_end=51):
     """Processes the optimisation runs and returns a dictionary of results.
