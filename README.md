@@ -16,6 +16,17 @@ The remainder of this document details:
 - How to [reproduce the figures in the paper](#reproduction-of-figures-and-tables-in-the-paper).
 - How to [add your own acquisition functions and test problems](#incorporation-of-additional-test-problems-and-acquisition-functions).
 
+### Citation
+If you use any part of this code in your work, please cite our [Arxiv paper](https://arxiv.org/abs/1911.12809):
+```bibtex
+@misc{death:egreedy,
+    title = {Greed is Good: Exploration and Exploitation Trade-offs in Bayesian Optimisation},
+    author = {George {De Ath} and Richard M. Everson and Alma A. M. Rahat and Jonathan E. Fieldsend},
+    year = {2019},
+    eprint = {arXiv:1911.12809}
+}
+```
+
 ### Installation (docker)
 The easiest method to automatically set up the environment needed for the optimisation library to run and to repeat the experiments carried out in this work is to use [docker](http://www.docker.com). Install instructions for docker for many popular operating systems are can be found [here](https://docs.docker.com/install/). Once docker has been installed, the docker container can be download and ran as follows:
 ```bash
