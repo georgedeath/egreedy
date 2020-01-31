@@ -3,7 +3,7 @@
 #### George De Ath <sup>1</sup>, Richard M. Everson <sup>1</sup>, Alma A. M. Rahat, S <sup>2</sup>, Jonathan E. Fieldsend <sup>1</sup>
 <sup>1</sup> University of Exeter, United Kingdom, <sup>2</sup> Swansea University, United Kingdom
 
-This repository contains the Python3 code for the $\epsilon$-greedy strategies presented in:
+This repository contains the Python3 code for the ε-greedy strategies presented in:
 > George De Ath, Richard M. Everson, Alma A. M. Rahat, and Jonathan E. Fieldsend. 2020. Greed is Good: Exploration and Exploitation Trade-offs in Bayesian Optimisation, to appear in ACM Transactions on Evolutionary Learning and Optimization (TELO).
 > **Preprint:** https://arxiv.org/abs/1911.12809
 
@@ -80,7 +80,7 @@ Fitness value: [0.24748876]
 Please ignore errors like `Getting LinuxMem: [Errno 2] No such file or directory: '/proc/621/status` as these are from OpenFOAM and do not impact the optimisation process.
 
 ### Training data
-The initial training locations for each of the 51 sets of [Latin hypercube](https://www.jstor.org/stable/1268522) samples are located in the `training_data` directory in this repository with the filename structure `ProblemName_number`, e.g. the first set of training locations for the Branin problem is stored in `Branin_1.npz`. Each of these files is a compressed numpy file created with [numpy.savez](https://docs.scipy.org/doc/numpy/reference/generated/numpy.savez.html). It has two [numpy.ndarrays](https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html) containing the $2 \times D$ initial locations and their corresponding fitness values. To load and inspect these values use the following instructions:
+The initial training locations for each of the 51 sets of [Latin hypercube](https://www.jstor.org/stable/1268522) samples are located in the `training_data` directory in this repository with the filename structure `ProblemName_number`, e.g. the first set of training locations for the Branin problem is stored in `Branin_1.npz`. Each of these files is a compressed numpy file created with [numpy.savez](https://docs.scipy.org/doc/numpy/reference/generated/numpy.savez.html). It has two [numpy.ndarrays](https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html) containing the 2*D initial locations and their corresponding fitness values. To load and inspect these values use the following instructions:
 ```python
 >>> import numpy as np
 >>> with np.load('Branin_1.npz') as data:
@@ -102,9 +102,9 @@ array({'t1_x': -4.268447250704135, 't1_y': -0.6937799887556437}, dtype=object)
 these are automatically passed to the problem function when it is instantiated to create a specific problem instance.
 
 ### Optimisation results
-The results of all optimisation runs can be found in the `results` directory. The filenames have the following structure: `ProblemName_Run_TotalBudget_Method.npz`, with the $\epsilon$-greedy methods having the format: `ProblemName_Run_TotalBudget_Method_eps0.XX.npz` where `XX` corresponds to the value of $\epsilon$ used. Similar to the training data, these are also [numpy.ndarrays](https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html)  and contain two items, `Xtr` and `Ytr`, corresponding to the evaluated locations in the optimisation run and their function evaluations. Note that the evaluations and their function values will also include the initial  $2 \times D$ training locations at the beginning of the arrays and that the methods $\epsilon$-RS and $\epsilon$-PF have results files named *eRandom* and *eFront* respectively.
+The results of all optimisation runs can be found in the `results` directory. The filenames have the following structure: `ProblemName_Run_TotalBudget_Method.npz`, with the ε-greedy methods having the format: `ProblemName_Run_TotalBudget_Method_eps0.XX.npz` where `XX` corresponds to the value of ε used. Similar to the training data, these are also [numpy.ndarrays](https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html)  and contain two items, `Xtr` and `Ytr`, corresponding to the evaluated locations in the optimisation run and their function evaluations. Note that the evaluations and their function values will also include the initial 2*D training locations at the beginning of the arrays and that the methods ε-RS and ε-PF have results files named *eRandom* and *eFront* respectively.
 
-The following example loads the first optimisation run on the Branin test problem with the $\epsilon$-PF method using $\epsilon = 0.1$:
+The following example loads the first optimisation run on the Branin test problem with the ε-PF method using ε = 0.1:
 ```python
 >>> import numpy as np
 >>> # load the 
@@ -172,13 +172,13 @@ positional arguments:
                         Set of test problems to evaluate.
 ```
 ### Reproduction of figures and tables in the paper
-The [jupyter](https://jupyter.org) notebook `notebooks/Non_results_figure_generation.ipynb` contains the code to generate the following figures:
+The [jupyter](https://jupyter.org) notebook [Non_results_figure_generation.ipynb](notebooks/New_fitness_functions_and_acquisition_functions.ipynb) contains the code to generate the following figures:
 - Figure 1: Showing an example Gaussian process model and its corresponding Pareto front and set.
 - Figure 2: Contours of acquisition function values for EI, UCB and PI.
-- Figure 3: Contours of weighted EI for three values of $\omega$.
+- Figure 3: Contours of weighted EI for three values of ω.
 - Figure 1 (Supplementary material): Landscape of the WangFreitas test problem.
 
-The jupyter notebook `notebooks/Process_results_and_generate_figures_for_paper.ipynb` contains the code to load and process the optimisation results (stored in the `results` directory) as well as the code to produce all results figures and tables used in the paper and supplementary material.
+The jupyter notebook [Process_results_and_generate_figures_for_paper.ipynb](notebooks/Process_results_and_generate_figures_for_paper.ipynb) contains the code to load and process the optimisation results (stored in the `results` directory) as well as the code to produce all results figures and tables used in the paper and supplementary material.
 
 ### Incorporation of additional test problems and acquisition functions
-The jupyter notebook `notebooks/New_fitness_functions_and_acquisition_functions.ipynb` contains examples and instructions of how to include your own test problems (fitness functions) and acquisition functions.
+The jupyter notebook [New_fitness_functions_and_acquisition_functions.ipynb](notebooks/New_fitness_functions_and_acquisition_functions.ipynb) contains examples and instructions of how to include your own test problems (fitness functions) and acquisition functions.
