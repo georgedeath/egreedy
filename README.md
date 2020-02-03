@@ -83,6 +83,7 @@ Finally, compile the pressure calculation function and check that the test probl
 > cd /egreedy/egreedy/test_problems/Exeter_CFD_Problems/data/PitzDaily/solvers/
 > wmake calcPressureDifference
 > # test the PitzDaily solver
+> cd /egreedy
 > python -m egreedy.test_problems.pitzdaily
 PitzDaily successfully instantiated..
 Generated valid solution, evaluating..
@@ -93,10 +94,10 @@ Please ignore errors like `Getting LinuxMem: [Errno 2] No such file or directory
 ### Training data
 The initial training locations for each of the 51 sets of [Latin hypercube](https://www.jstor.org/stable/1268522) samples are located in the `training_data` directory in this repository with the filename structure `ProblemName_number`, e.g. the first set of training locations for the Branin problem is stored in `Branin_1.npz`. Each of these files is a compressed numpy file created with [numpy.savez](https://docs.scipy.org/doc/numpy/reference/generated/numpy.savez.html). It has two [numpy.ndarrays](https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html) containing the 2*D initial locations and their corresponding fitness values. To load and inspect these values use the following instructions:
 ```python
-> cd training_data
+> cd /egreedy
 > python
 >>> import numpy as np
->>> with np.load('Branin_1.npz') as data:
+>>> with np.load('training_data/Branin_1.npz') as data:
 	Xtr = data['arr_0']
 	Ytr = data['arr_1']
 >>> Xtr.shape, Ytr.shape
@@ -104,10 +105,10 @@ The initial training locations for each of the 51 sets of [Latin hypercube](http
 ```
 The robot pushing test problems (push4 and push8) have a third array `'arr_2'`  that contains their instance-specific parameters:
 ```python
-> cd training_data
+> cd /egreedy
 > python
 >>> import numpy as np
->>> with np.load('push4_1.npz', allow_pickle=True) as data:
+>>> with np.load('training_data/push4_1.npz', allow_pickle=True) as data:
 	Xtr = data['arr_0']
 	Ytr = data['arr_1']
 	instance_params = data['arr_2']
@@ -121,11 +122,11 @@ The results of all optimisation runs can be found in the `results` directory. Th
 
 The following example loads the first optimisation run on the Branin test problem with the ε-PF method using ε = 0.1:
 ```python
-> cd results
+> cd /egreedy 
 > python
 >>> import numpy as np
 >>> # load the 
->>> with np.load('Branin_1_250_eFront_eps0.1.npz', allow_pickle=True) as data:
+>>> with np.load('results/Branin_1_250_eFront_eps0.1.npz', allow_pickle=True) as data:
 	Xtr = data['Xtr']
 	Ytr = data['Ytr']
 >>> Xtr.shape, Ytr.shape
