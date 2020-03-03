@@ -189,6 +189,8 @@ positional arguments:
   {synthetic,robot,pitzdaily}
                         Set of test problems to evaluate.
 ```
+Note that each test problem is evaluated approximately 250000 times for the 20 methods in the script. The synthetic functions and robot pushing problem have trivial computational cost but the Gaussian Processes need to be trained and corresponding acquisition function optimised for each function evaluation. The PitzDaily test problem, however, will take around 1 minute to evaluate, meaning that the total time spent evaluating the computational fluid dynamics solver is  approximately 160 days. Given that the optimisation runs are independent and embarrassingly parallel, we recommend the use of ``run_experiment.py`` in a batch setting across multiple cores/machines.
+
 ### Reproduction of figures and tables in the paper
 The [jupyter](https://jupyter.org) notebook [Non_results_figure_generation.ipynb](notebooks/New_fitness_functions_and_acquisition_functions.ipynb) contains the code to generate the following figures:
 - Figure 1: Showing an example Gaussian process model and its corresponding Pareto front and set.
