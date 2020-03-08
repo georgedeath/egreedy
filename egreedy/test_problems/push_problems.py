@@ -12,6 +12,27 @@ pushing to targets to unknown target locations. The robots can block each
 other and therefore the problem will likely be much harder than the push4
 problem.
 
+Each problem class, once instantiated can be directed called, eg:
+>>> f = push4(t1_x=4, t1_y=4)
+>>> x = numpy.array([-4, -4, 100, (1 / 4) * numpy.pi])
+>>> f(x)
+array([3.75049018])
+
+Additional parameters can also be specified to allow the visualisation and
+saving of the robot pushing problem. Assuming the function as be instantiated
+as above, a dictionary named "plotting_args" can be passed during the function
+call, e.g. f(x, plotting_args) to facilitate plotting. Its keys are as follows:
+    'show': bool
+        Whether to show the pushing problem.
+    'save': bool
+        Whether to save the shown images - also needs 'show' to be True.
+    'save_dir': str
+        Directory to save the images to. It must exist and be set if saving.
+    'save_every': int
+        N'th frame to be saved; e.g. if set to 10 every 10th frame gets saved.
+    'save_prefix': str
+        Prefix given to the saved filenames - useful when saving multiple runs.
+
 Note that once initialised (details in each problem definition) the problem
 domain for each problem is mapped to [0, 1]^D because the time-step parameter
 (in [0, 300]) is an order of magnitude larger than the initial robot position
@@ -76,7 +97,7 @@ class push4:
 
         self.cf = None
 
-    def __call__(self, x):
+    def __call__(self, x, plotting_args=None):
         x = np.atleast_2d(x)
 
         # map from unit space to original space
@@ -87,7 +108,7 @@ class push4:
             val[i, :] = push_4D(x[i, :],
                                 self.t1_x, self.t1_y,
                                 self.o1_x, self.o1_y,
-                                draw=False)
+                                plotting_args)
 
         return val.ravel()
 
@@ -150,7 +171,7 @@ class push8:
 
         self.cf = None
 
-    def __call__(self, x):
+    def __call__(self, x, plotting_args=None):
         x = np.atleast_2d(x)
 
         # map from unit space to original space
@@ -163,6 +184,6 @@ class push8:
                                 self.t2_x, self.t2_y,
                                 self.o1_x, self.o1_y,
                                 self.o2_x, self.o2_y,
-                                draw=False)
+                                plotting_args)
 
         return val.ravel()

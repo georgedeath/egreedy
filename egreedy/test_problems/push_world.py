@@ -11,6 +11,7 @@ References
 from Box2D import *
 from Box2D.b2 import *
 import numpy as np
+import os
 
 # import pygame without its "Hello from the pygame community" message.
 import contextlib
@@ -21,7 +22,7 @@ with contextlib.redirect_stdout(None):
 # this just makes pygame show what's going on
 class guiWorld:
     def __init__(self, fps):
-        self.SCREEN_WIDTH, self.SCREEN_HEIGHT = 1000, 1000
+        self.SCREEN_WIDTH, self.SCREEN_HEIGHT = 750, 750
         self.TARGET_FPS = fps
         self.PPM = 25.0  # pixels per meter
         self.screen = pygame.display.set_mode((self.SCREEN_WIDTH,
@@ -103,44 +104,55 @@ class guiWorld:
 # this is the interface to pybox2d
 # edited to allow the target locations to be drawn
 class b2WorldInterface:
-    def __init__(self, do_gui=True):
+    def __init__(self, plotting_args=None):
+        # default plotting arguments
+        self.show = False
+        self.save = False
+        self.save_every = 10
+        self.save_dir = None
+        self.save_prefix = 'push'
+        
+        if plotting_args is not None:
+            for arg in ['show', 'save', 'save_every', 
+                        'save_dir', 'save_prefix']:
+                try:
+                    setattr(self, arg, plotting_args[arg])
+                except KeyError:
+                    pass
+                    
+            if self.save and not self.show:
+                errmsg = 'Due to limitations in pygame, images can only be'
+                errmsg += ' saved if they are also shown to screen'
+                errmsg += ' therefore if save is True show must also be True'
+                raise ValueError(errmsg)
+                
+            if self.save and self.save_dir is None:
+                errmsg = 'Please set a save directory ("save_dir") if'
+                errmsg += ' saving images'
+                raise ValueError(errmsg)
+        
         self.world = b2World(gravity=(0.0, 0.0), doSleep=True)
-        self.do_gui = do_gui
         self.TARGET_FPS = 100
         self.TIME_STEP = 1.0 / self.TARGET_FPS
         self.VEL_ITERS, self.POS_ITERS = 10, 10
         self.bodies = []
-
-        if do_gui:
-            self.gui_world = guiWorld(self.TARGET_FPS)
-        else:
-            self.gui_world = None
-
-    def initialize_gui(self):
-        if self.gui_world is None:
-            self.gui_world = guiWorld(self.TARGET_FPS)
-        self.do_gui = True
-
-    def stop_gui(self):
-        self.do_gui = False
+        self.gui_world = guiWorld(self.TARGET_FPS) if self.show else None
 
     def add_bodies(self, new_bodies):
         """ add a single b2Body or list of b2Bodies to the world"""
-        if type(new_bodies) == list:
-            self.bodies += new_bodies
-        else:
-            self.bodies.append(new_bodies)
+        self.bodies.append(new_bodies)
 
-    def step(self, idx=0, show_display=True):
+    def step(self, t=0):
         self.world.Step(self.TIME_STEP, self.VEL_ITERS, self.POS_ITERS)
-        if show_display and self.do_gui:
+        
+        if self.show:
             self.gui_world.draw(self.bodies)
 
-            # set the 'False' to 'True' to save images to c:\temp\push_images\
-            if False and idx % 10 == 0:
-                pygame.image.save(self.gui_world.screen,
-                                  r'c:\\temp\\push_images\\'
-                                  + str(idx) + '.bmp')
+            if self.save and (t % self.save_every == 0):
+                save_name = f'{self.save_prefix}_{t:04d}_.png'
+                save_path = os.path.join(self.save_dir, save_name)
+                
+                pygame.image.save(self.gui_world.screen, save_path)
 
 
 # edited to change the userdata to include color information
@@ -227,7 +239,7 @@ def make_1thing(base, b2world_interface, thing_shape, thing_size,
                      'type': 'object',
                      'target': obj_target}
 
-    b2world_interface.add_bodies([link])
+    b2world_interface.add_bodies(link)
     return link
 
 
@@ -238,7 +250,7 @@ def make_base(table_width, table_length, b2world_interface):
                                   shapes=b2PolygonShape(box=(table_length,
                                                              table_width)))
 
-    b2world_interface.add_bodies([base])
+    b2world_interface.add_bodies(base)
     return base
 
 
@@ -277,7 +289,7 @@ def simu_push_8D(world, base, thing, thing2, robot, robot2,
     return (list(thing.position), list(thing2.position))
 
 
-def push_4D(x, t1_x, t1_y, o1_x, o1_y, draw=False):
+def push_4D(x, t1_x, t1_y, o1_x, o1_y, plotting_args=None):
     # INPUTS::
     # x = r1_x, r1_y, r1_steps, r1_hand_angle
     # min = [-5; -5; 10; 0];
@@ -290,7 +302,7 @@ def push_4D(x, t1_x, t1_y, o1_x, o1_y, draw=False):
     r1_steps = np.round(r1_steps).astype(int)
 
     # creats the world
-    world = b2WorldInterface(draw)
+    world = b2WorldInterface(plotting_args)
 
     # object properties and robot properties
     oshape, osize, ofriction, odensity = 'circle', 1, 0.01, 0.05
@@ -327,7 +339,7 @@ def push_4D(x, t1_x, t1_y, o1_x, o1_y, draw=False):
     return d1
 
 
-def push_8D(x, t1_x, t1_y, t2_x, t2_y, o1_x, o1_y, o2_x, o2_y, draw=False):
+def push_8D(x, t1_x, t1_y, t2_x, t2_y, o1_x, o1_y, o2_x, o2_y, plotting_args=None):
     # INPUTS::
     # x = rx, ry, steps, hand_angle, rx, ry, steps, hand_angle
     # min = [-5; -5; 10; 0];
@@ -341,7 +353,7 @@ def push_8D(x, t1_x, t1_y, t2_x, t2_y, o1_x, o1_y, o2_x, o2_y, draw=False):
     r2_steps = np.round(r2_steps).astype(int)
 
     # creats the world
-    world = b2WorldInterface(draw)
+    world = b2WorldInterface(plotting_args)
 
     # object properties and robot properties
     oshape, osize, ofriction, odensity = 'circle', 1, 0.01, 0.05
@@ -398,16 +410,11 @@ def push_8D(x, t1_x, t1_y, t2_x, t2_y, o1_x, o1_y, o2_x, o2_y, draw=False):
 if __name__ == "__main__":
     # push4 example
     x = np.array([-4, -4, 100, (1 / 4) * np.pi])
-    d = push_4D(x, 4, 4, 0, 0, draw=True)
+    d = push_4D(x, 4, 4, 0, 0, {'show': True})
     print(d)
 
     # push8 example
     x = np.array([-3, -3, 100, (1 / 4) * np.pi,
                   4, 2.5, 100, (1 / 4) * np.pi])
-    d = push_8D(x,
-                4, 4,
-                0, -4,
-                -3, 0,
-                3, 0,
-                draw=True)
+    d = push_8D(x, 4, 4, 0, -4, -3, 0, 3, 0, {'show': True})
     print(d)
