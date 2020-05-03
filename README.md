@@ -65,7 +65,7 @@ Note that, on windows, to install `swig` and `pygame` it may be necessary to als
 
 Once the above python modules have been installed, clone this repository to a location of your choosing (in the following we assume you are installing to `/egreedy/`) and test that it works (CTRL+C to cancel optimisation run):
 ```bash
-> git clone https://bitbucket.org/georgedeath/egreedy/ /egreedy
+> git clone https://github.com/georgedeath/egreedy/ /egreedy
 > cd /egreedy
 > python -m egreedy.optimizer
 Loaded training data from: training_data/Branin_1.npz
