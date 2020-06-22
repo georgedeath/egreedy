@@ -46,7 +46,7 @@ Once the above commands have been ran you will be in the command prompt of the c
 Loaded training data from: training_data/Branin_1.npz
 Loaded test problem: Branin
 Using acquisition function: eFront
-        with optional arguments: {'epsilon': 0.25}
+        with optional arguments: {'epsilon': 0.1}
 Training a GP model with 4 data points.
 Optimising the acquisition function.
 ..

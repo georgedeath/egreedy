@@ -317,5 +317,5 @@ if __name__ == "__main__":
                        verbose=True,  # print status
                        continue_runs=False,  # resume runs
                        save=False,  # whether to save the run
-                       acquisition_args={'epsilon': 0.22}  # acq func args
+                       acquisition_args={'epsilon': 0.1}  # acq func args
                        )
