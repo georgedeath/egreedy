@@ -176,14 +176,14 @@ Evaluate all methods on a set of functions.
 --------------------------------------------
 Examples:
     Evaluate all methods in the paper on the synthetic functions:
-    > python run_all_experiments.py -f synthetic
+    > python run_all_experiments.py synthetic
 
     Evaluate all methods in the paper on the robot pushing functions:
-    > python run_all_experiments.py -f robot
+    > python run_all_experiments.py robot
 
     Evaluate all methods in the paper on the PitzDaily test function:
     (Note that this can only be performed if OpenFOAM has been set up correctly)
-    > python run_all_experiments.py -f pitzdaily
+    > python run_all_experiments.py pitzdaily
 
 positional arguments:
   {synthetic,robot,pitzdaily}

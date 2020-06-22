@@ -3,14 +3,14 @@ Evaluates all methods on the a set of test functions functions.
 
 Examples:
     Evaluate all methods in the paper on the synthetic functions:
-    > python run_all_experiments.py -f synthetic
+    > python run_all_experiments.py synthetic
 
     Evaluate all methods in the paper on the robot pushing functions:
-    > python run_all_experiments.py -f robot
+    > python run_all_experiments.py robot
 
     Evaluate all methods in the paper on the PitzDaily test function:
     (Note that this can only be performed if OpenFOAM is set up correctly)
-    > python run_all_experiments.py -f pitzdaily
+    > python run_all_experiments.py pitzdaily
 
 optional arguments:
   -h, --help            show this help message and exit
