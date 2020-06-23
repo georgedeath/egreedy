@@ -33,14 +33,12 @@ The easiest method to automatically set up the environment needed for the optimi
 > # download the docker container
 > docker pull georgedeath/egreedy
 > # run the container
-> docker run -it georgedeath/egreedy /bin/bash
+> docker run -it georgedeath/egreedy
 Welcome to the OpenFOAM v5 Docker Image
 ..
 ```
 Once the above commands have been ran you will be in the command prompt of the container, run the following commands to test the functionality of the code (CTRL+C to prematurely halt the run):
 ```bash
-> # change to the code directory - this contains the git repo
-> cd /egreedy
 > # run an example optimisation run
 > python -m egreedy.optimizer
 Loaded training data from: training_data/Branin_1.npz
@@ -125,8 +123,8 @@ The following example loads the first optimisation run on the Branin test proble
 > cd /egreedy 
 > python
 >>> import numpy as np
->>> # load the 
->>> with np.load('results/Branin_1_250_eFront_eps0.1.npz', allow_pickle=True) as data:
+>>> # load the training data.
+>>> with np.load('results_paper/Branin_1_250_eFront_eps0.1.npz', allow_pickle=True) as data:
 	Xtr = data['Xtr']
 	Ytr = data['Ytr']
 >>> Xtr.shape, Ytr.shape
@@ -189,7 +187,7 @@ positional arguments:
   {synthetic,robot,pitzdaily}
                         Set of test problems to evaluate.
 ```
-Note that each test problem is evaluated approximately 250000 times for the 20 methods in the script. The synthetic functions and robot pushing problem have trivial computational cost but the Gaussian Processes need to be trained and corresponding acquisition function optimised for each function evaluation. The PitzDaily test problem, however, will take around 1 minute to evaluate, meaning that the total time spent evaluating the computational fluid dynamics solver is  approximately 160 days. Given that the optimisation runs are independent and embarrassingly parallel, we recommend the use of ``run_experiment.py`` in a batch setting across multiple cores/machines.
+Note that each test problem is evaluated approximately 250000 times for the 20 methods in the script. The synthetic functions and robot pushing problem have trivial computational cost but the Gaussian Processes need to be trained and corresponding acquisition function optimised for each function evaluation. The PitzDaily test problem, however, will take around 1 minute to evaluate, meaning that the total time spent evaluating the computational fluid dynamics solver is  approximately 160 days. Given that there is no interaction between optimisation runs, we suggest the use of ``run_experiment.py`` in a batch setting across multiple cores/machines. This could be accomplished, for example, by calling ``run_experiment.py`` with different sets of arguments (corresponding to each experiment to be carried out), on either multiple machines and/or different instances of python (e.g. with ``screen`` on Linux).
 
 ### Reproduction of figures and tables in the paper
 The [jupyter](https://jupyter.org) notebook [Non_results_figure_generation.ipynb](notebooks/New_fitness_functions_and_acquisition_functions.ipynb) contains the code to generate the following figures:
