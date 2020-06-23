@@ -56,7 +56,7 @@ Manual installation is straight-forward for the optimisation library apart from 
 
 ```bash
 > conda install -y scipy numpy matplotlib statsmodels swig jupyter
-> conda install -y pygmo --channel conda-forge
+> conda install -y ipopt=3.12.12 pygmo --channel conda-forge
 > pip install nlopt pyDOE2 pygame box2d-py GPy numpy-stl
 ```
 Note that, on windows, to install `swig` and `pygame` it may be necessary to also install [Visual C++ build tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
