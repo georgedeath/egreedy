@@ -128,7 +128,7 @@ def plot_convergence(data,
                            D['xvals'],
                            D['col_idx'],
                            xlabel='Function Evaluations',
-                           ylabel='Distance from Optimum',
+                           ylabel='Regret',
                            title='{:s} ({:d})'.format(paper_problem_name, dim),
                            colors=colors,
                            LABEL_FONTSIZE=LABEL_FONTSIZE,
@@ -149,7 +149,7 @@ def plot_convergence(data,
                        D['xvals'],
                        D['col_idx'],
                        xlabel='Function Evaluations',
-                       ylabel='Distance from Optimum',
+                       ylabel='Regret',
                        title='',
                        colors=colors,
                        LABEL_FONTSIZE=LABEL_FONTSIZE,
@@ -242,7 +242,7 @@ def plot_convergence_combined(data,
 
         # only the left column should have y-axis labels
         if problem_name in problem_names[::2]:
-            ylabel = 'Distance from Optimum'
+            ylabel = 'Regret'
         else:
             ylabel = None
 
@@ -364,7 +364,7 @@ def plot_boxplots(data,
             YV = [Y[:, :budget] for Y in D['yvals']]
             title = '{:s} ({:d}): T = {:d}'.format(paper_problem_name, dim, budget)
 
-            y_axis_label = 'Distance from Optimum' if i == 0 else None
+            y_axis_label = 'Regret' if i == 0 else None
 
             box_plot_maker(a,
                            YV,
@@ -467,7 +467,7 @@ def plot_boxplots_combined(data,
             YV = [Y[:, :budget] for Y in D['yvals']]
             title = '{:s} $({:d})$: T = {:d}'.format(paper_problem_name, dim, budget)
 
-            y_axis_label = 'Distance from Optimum' if i == 0 else None
+            y_axis_label = 'Regret' if i == 0 else None
 
             box_plot_maker(aa,
                            YV,
@@ -554,7 +554,7 @@ def plot_egreedy_comparison(data,
                     patch.set(hatch='//')
 
             if budget == budgets[0]:
-                a.set_ylabel('Distance from Optimum',
+                a.set_ylabel('Regret',
                              fontsize=LABEL_FONTSIZE)
 
             title = '{:s} ({:d}): T = {:d}'.format(paper_problem_name, dim, budget)
@@ -639,7 +639,7 @@ def plot_egreedy_comparison_combined(data,
                     patch.set(hatch='//')
 
             if budget == budgets[0]:
-                aa.set_ylabel('Distance from Optimum', fontsize=LABEL_FONTSIZE)
+                aa.set_ylabel('Regret', fontsize=LABEL_FONTSIZE)
 
             title = '{:s} ({:d}): T = {:d}'.format(paper_problem_name, dim, budget)
             aa.set_title(title, fontsize=TITLE_FONTSIZE)
