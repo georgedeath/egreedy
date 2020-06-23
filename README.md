@@ -123,7 +123,6 @@ The following example loads the first optimisation run on the Branin test proble
 > cd /egreedy 
 > python
 >>> import numpy as np
->>> # load the training data.
 >>> with np.load('results_paper/Branin_1_250_eFront_eps0.1.npz', allow_pickle=True) as data:
 	Xtr = data['Xtr']
 	Ytr = data['Ytr']
