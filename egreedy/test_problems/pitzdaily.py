@@ -23,6 +23,7 @@ class PitzDaily:
        Computational Fluid Dynamics.
        In Parallel Problem Solving from Nature – PPSN XV. Springer, 296–307.
     """
+
     def __init__(self):
         self.dim = 10
         self.yopt = 0
@@ -69,7 +70,7 @@ class PitzDaily:
             if self.cf(x):
                 return x
 
-        raise Exception('No valid solution could be generated')
+        raise Exception("No valid solution could be generated")
 
     @property
     def lb(self):
@@ -102,25 +103,27 @@ class PitzDailyProblem(object):
     >>> print(result)
     0.612872766622
     """
+
     def __init__(self):
         # removing all command line arguments because openFOAM tries to read
         # these in even though they are given to a different python script
         sys.argv = sys.argv[:1]
 
         # directory containing the problem info
-        ddir = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                            'Exeter_CFD_Problems/data/'))
+        ddir = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), "Exeter_CFD_Problems/data/")
+        )
 
         # create a temporary directory for the CFD run
         self.temp_dir_object = tempfile.TemporaryDirectory()
-        self.temp_dir_path = self.temp_dir_object.name + '/'
+        self.temp_dir_path = self.temp_dir_object.name + "/"
 
         # settings for the CFD computation
         self.settings = {
-            'source_case': os.path.join(ddir, 'PitzDaily/case_fine/'),
-            'case_path': self.temp_dir_path,
-            'boundary_files': [os.path.join(ddir, 'PitzDaily/boundary.csv')],
-            'fixed_points_files': [os.path.join(ddir, 'PitzDaily/fixed.csv')]
+            "source_case": os.path.join(ddir, "PitzDaily/case_fine/"),
+            "case_path": self.temp_dir_path,
+            "boundary_files": [os.path.join(ddir, "PitzDaily/boundary.csv")],
+            "fixed_points_files": [os.path.join(ddir, "PitzDaily/fixed.csv")],
         }
 
         # importing here so we only use the CFD module if explicitly called
@@ -146,12 +149,12 @@ if __name__ == "__main__":
 
     # instantiate the test problem
     f = PitzDaily()
-    print('PitzDaily successfully instantiated..')
+    print("PitzDaily successfully instantiated..")
 
     # generate a valid solution
     x = f.generate_valid_solution()
-    print('Generated valid solution, evaluating..')
+    print("Generated valid solution, evaluating..")
 
     # evaluate
     fx = f(x)
-    print('Fitness value:', fx)
+    print("Fitness value:", fx)

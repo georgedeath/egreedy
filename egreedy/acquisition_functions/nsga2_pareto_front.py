@@ -70,8 +70,9 @@ def NSGA2_pygmo(model, fevals, lb, ub, cf=None):
 
         def fitness(self, X):
             X = np.atleast_2d(X)
-            f = model_fitness(X, self.model, self.cf, self.got_cf,
-                              self.i, self.i + X.shape[0])
+            f = model_fitness(
+                X, self.model, self.cf, self.got_cf, self.i, self.i + X.shape[0]
+            )
             self.i += X.shape[0]
             return f
 
@@ -107,11 +108,15 @@ def NSGA2_pygmo(model, fevals, lb, ub, cf=None):
     N_GENS = int(np.ceil(fevals / POPSIZE))
     TOTAL_EVALUATIONS = POPSIZE * N_GENS
 
-    nsga2 = pg.algorithm(pg.nsga2(gen=1,
-                                  cr=0.8,       # cross-over probability.
-                                  eta_c=20.0,   # distribution index (cr)
-                                  m=1 / D,        # mutation rate
-                                  eta_m=20.0))  # distribution index (m)
+    nsga2 = pg.algorithm(
+        pg.nsga2(
+            gen=1,
+            cr=0.8,  # cross-over probability.
+            eta_c=20.0,  # distribution index (cr)
+            m=1 / D,  # mutation rate
+            eta_m=20.0,
+        )
+    )  # distribution index (m)
 
     # preallocate the storage of every location and fitness to be evaluated
     model_fitness.X = np.zeros((TOTAL_EVALUATIONS, D))

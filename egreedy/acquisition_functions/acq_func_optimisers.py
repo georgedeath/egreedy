@@ -74,8 +74,9 @@ class ParetoFrontOptimiser(BaseOptimiser):
         """Gets the (estimated) Pareto front of the predicted mean and
         standard deviation of a GPy.models.GPRegression model.
         """
-        X_front, musigma_front = NSGA2_pygmo(model, self.acq_budget, self.lb,
-                                             self.ub, self.cf)
+        X_front, musigma_front = NSGA2_pygmo(
+            model, self.acq_budget, self.lb, self.ub, self.cf
+        )
 
         return X_front, musigma_front[:, 0], musigma_front[:, 1]
 
@@ -104,12 +105,15 @@ class UCB(ParetoFrontOptimiser):
 
     def __call__(self, model):
         X, mu, sigma = self.get_front(model)
-        ucb = standard_acq_funcs_minimize.UCB(mu, sigma,
-                                              lb=self.lb,
-                                              ub=self.ub,
-                                              t=model.X.shape[0] + 1,
-                                              d=model.X.shape[1],
-                                              **self.acquisition_args)
+        ucb = standard_acq_funcs_minimize.UCB(
+            mu,
+            sigma,
+            lb=self.lb,
+            ub=self.ub,
+            t=model.X.shape[0] + 1,
+            d=model.X.shape[1],
+            **self.acquisition_args
+        )
         return X[np.argmax(ucb), :]
 
 
@@ -123,8 +127,7 @@ class eFront(ParetoFrontOptimiser):
 
     def __call__(self, model):
         X, mu, sigma = self.get_front(model)
-        Xnew = egreedy_acq_funcs_minimize.eFront(X, mu, sigma,
-                                                 **self.acquisition_args)
+        Xnew = egreedy_acq_funcs_minimize.eFront(X, mu, sigma, **self.acquisition_args)
         return Xnew
 
 
@@ -138,11 +141,9 @@ class eRandom(ParetoFrontOptimiser):
 
     def __call__(self, model):
         X, mu, sigma = self.get_front(model)
-        Xnew = egreedy_acq_funcs_minimize.eRandom(X, mu, sigma,
-                                                  lb=self.lb,
-                                                  ub=self.ub,
-                                                  cf=self.cf,
-                                                  **self.acquisition_args)
+        Xnew = egreedy_acq_funcs_minimize.eRandom(
+            X, mu, sigma, lb=self.lb, ub=self.ub, cf=self.cf, **self.acquisition_args
+        )
         return Xnew
 
 
@@ -208,8 +209,9 @@ class PI(BaseOptimiser):
             mu, sigmaSQR = model.predict(np.atleast_2d(x), full_cov=False)
 
             # negate PI as DIRECT minimises so we want the largest negative PI
-            r = -standard_acq_funcs_minimize.PI(mu, np.sqrt(sigmaSQR),
-                                                incumbent).flat[0]
+            r = -standard_acq_funcs_minimize.PI(mu, np.sqrt(sigmaSQR), incumbent).flat[
+                0
+            ]
             return r
 
         # define a direct optimisation instance

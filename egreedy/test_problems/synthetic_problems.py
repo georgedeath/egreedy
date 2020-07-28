@@ -79,9 +79,11 @@ class WangFreitas:
 
     def __call__(self, x):
         x = np.atleast_2d(x)
-        val = -(2 * np.exp(-0.5 * (self.a - x)**2 / self.theta_1**2)
-                + 4 * np.exp(-0.5 * (self.b - x)**2 / self.theta_2**2)
-                + self.epsilon)
+        val = -(
+            2 * np.exp(-0.5 * (self.a - x) ** 2 / self.theta_1 ** 2)
+            + 4 * np.exp(-0.5 * (self.b - x) ** 2 / self.theta_2 ** 2)
+            + self.epsilon
+        )
         return val.ravel()
 
 
@@ -110,24 +112,24 @@ class Branin:
 
         # function parameters
         self.a = 1
-        self.b = 5.1 / (4 * np.pi**2)
+        self.b = 5.1 / (4 * np.pi ** 2)
         self.c = 5 / np.pi
         self.r = 6
         self.s = 10
         self.t = 1 / (8 * np.pi)
 
-        self.xopt = np.array([[-np.pi, 12.275],
-                              [np.pi, 2.275],
-                              [9.42478, 2.475]])
+        self.xopt = np.array([[-np.pi, 12.275], [np.pi, 2.275], [9.42478, 2.475]])
         self.yopt = 0.397887
 
         self.cf = None
 
     def __call__(self, x):
         x = np.atleast_2d(x)
-        val = (self.a * (x[:, 1] - self.b * x[:, 0]**2
-                         + self.c * x[:, 0] - self.r)**2
-               + self.s * (1 - self.t) * np.cos(x[:, 0]) + self.s)
+        val = (
+            self.a * (x[:, 1] - self.b * x[:, 0] ** 2 + self.c * x[:, 0] - self.r) ** 2
+            + self.s * (1 - self.t) * np.cos(x[:, 0])
+            + self.s
+        )
         return val.ravel()
 
 
@@ -163,11 +165,11 @@ class BraninForrester:
 
         # function parameters
         self.a = 1.0
-        self.b = 5.1 / (4 * np.pi**2)
-        self.c = 5. / np.pi
+        self.b = 5.1 / (4 * np.pi ** 2)
+        self.c = 5.0 / np.pi
         self.r = 6.0
         self.s = 10.0
-        self.t = 1. / (8 * np.pi)
+        self.t = 1.0 / (8 * np.pi)
 
         self.xopt = np.array([-3.689, 13.629])
         self.yopt = -16.64402
@@ -176,10 +178,12 @@ class BraninForrester:
 
     def __call__(self, x):
         x = np.atleast_2d(x)
-        val = (self.a * (x[:, 1] - self.b * x[:, 0]**2
-                         + self.c * x[:, 0] - self.r)**2
-               + self.s * (1 - self.t) * np.cos(x[:, 0]) + self.s
-               + 5 * x[:, 0])
+        val = (
+            self.a * (x[:, 1] - self.b * x[:, 0] ** 2 + self.c * x[:, 0] - self.r) ** 2
+            + self.s * (1 - self.t) * np.cos(x[:, 0])
+            + self.s
+            + 5 * x[:, 0]
+        )
         return val.ravel()
 
 
@@ -188,9 +192,9 @@ class logGoldsteinPrice:
     See: http://www.sfu.ca/~ssurjano/goldpr.html
 
     .. math::
-        f() = log((1 + (x_1 + x_2 +1 )^2 (19 - 14 x_1 + 3 x_1^2 - 14 x_2 + 6 x_1 x_2 + 3 x_2^2))
-                  (30 + (2 x_1 - 3 x_2)^2 (18 - 32 x_1 + 12 x_1^2 + 48 x_2 - 36 x_1 x_2 + 27 x_2^2))
-                 )
+        f(x) = log((1 + (x_1 + x_2 +1 )^2 (19 - 14 x_1 + 3 x_1^2 - 14 x_2 + 6 x_1 x_2 + 3 x_2^2))
+                   (30 + (2 x_1 - 3 x_2)^2 (18 - 32 x_1 + 12 x_1^2 + 48 x_2 - 36 x_1 x_2 + 27 x_2^2))
+                  )
     """
 
     def __init__(self):
@@ -205,14 +209,78 @@ class logGoldsteinPrice:
 
     def __call__(self, x):
         x = np.atleast_2d(x)
-        val = np.log((1 + (x[:, 0] + x[:, 1] + 1)**2
-                     * (19 - 14 * x[:, 0] + 3 * x[:, 0]**2
-                        - 14 * x[:, 1] + 6 * x[:, 0] * x[:, 1]
-                        + 3 * x[:, 1]**2))
-                     * (30 + (2 * x[:, 0] - 3 * x[:, 1])**2
-                        * (18 - 32 * x[:, 0] + 12 * x[:, 0]**2
-                           + 48 * x[:, 1] - 36 * x[:, 0] * x[:, 1]
-                           + 27 * x[:, 1]**2)))
+        val = np.log(
+            (
+                1
+                + (x[:, 0] + x[:, 1] + 1) ** 2
+                * (
+                    19
+                    - 14 * x[:, 0]
+                    + 3 * x[:, 0] ** 2
+                    - 14 * x[:, 1]
+                    + 6 * x[:, 0] * x[:, 1]
+                    + 3 * x[:, 1] ** 2
+                )
+            )
+            * (
+                30
+                + (2 * x[:, 0] - 3 * x[:, 1]) ** 2
+                * (
+                    18
+                    - 32 * x[:, 0]
+                    + 12 * x[:, 0] ** 2
+                    + 48 * x[:, 1]
+                    - 36 * x[:, 0] * x[:, 1]
+                    + 27 * x[:, 1] ** 2
+                )
+            )
+        )
+        return val.ravel()
+
+
+class GoldsteinPrice:
+    """
+    Goldstein-Price Function
+    See: http://www.sfu.ca/~ssurjano/goldpr.html
+
+    .. math::
+        f(x) = (1 + (x_1 + x_2 +1 )^2 (19 - 14 x_1 + 3 x_1^2 - 14 x_2 + 6 x_1 x_2 + 3 x_2^2))
+                (30 + (2 x_1 - 3 x_2)^2 (18 - 32 x_1 + 12 x_1^2 + 48 x_2 - 36 x_1 x_2 + 27 x_2^2))
+    """
+
+    def __init__(self):
+        self.dim = 2
+        self.lb = np.full(self.dim, -2.0)
+        self.ub = np.full(self.dim, 2.0)
+
+        # optimum value(s)
+        self.xopt = np.array([0.0, -1.0])
+        self.yopt = self.__call__(self.xopt)
+
+        # constraint
+        self.cf = None
+
+    def __call__(self, x):
+        x = np.atleast_2d(x)
+
+        term1 = 1.0 + (x[:, 0] + x[:, 1] + 1) ** 2 * (
+            19.0
+            - 14.0 * x[:, 0]
+            + 3.0 * x[:, 0] ** 2
+            - 14.0 * x[:, 1]
+            + 6.0 * x[:, 0] * x[:, 1]
+            + 3.0 * x[:, 1] ** 2
+        )
+        term2 = 30 + (2.0 * x[:, 0] - 3.0 * x[:, 1]) ** 2 * (
+            18.0
+            - 32.0 * x[:, 0]
+            + 12.0 * x[:, 0] ** 2
+            + 48.0 * x[:, 1]
+            - 36.0 * x[:, 0] * x[:, 1]
+            + 27.0 * x[:, 1] ** 2
+        )
+        val = term1 * term2
+
         return val.ravel()
 
 
@@ -249,9 +317,9 @@ class Cosines:
 
     def __call__(self, x):
         x = np.atleast_2d(x)
-        g = (1.6 * x - 0.5)**2
+        g = (1.6 * x - 0.5) ** 2
         r = 0.3 * np.cos(3 * np.pi * (1.6 * x - 0.5))
-        val = - (1 - np.sum(g - r, axis=1))
+        val = -(1 - np.sum(g - r, axis=1))
         return val.ravel()
 
 
@@ -270,23 +338,60 @@ class logSixHumpCamel:
         self.lb = np.array([-3, -2])
         self.ub = np.array([3, 2])
 
-        self.xopt = np.array([[0.0898, -0.7126],
-                              [-0.0898, 0.7126]])
+        self.xopt = np.array([[0.0898, -0.7126], [-0.0898, 0.7126]])
         self.yopt = self.__call__(self.xopt[0])
 
         self.cf = None
 
     def __call__(self, x):
         x = np.atleast_2d(x)
-        val = np.log((4 - 2.1 * x[:, 0]**2 + (x[:, 0]**4 / 3))
-                     * x[:, 0]**2 + x[:, 0] * x[:, 1]
-                     + (-4 + 4 * x[:, 1]**2) * x[:, 1]**2
-                     + 1.0316 + 1e-4)
+        val = np.log(
+            (4 - 2.1 * x[:, 0] ** 2 + (x[:, 0] ** 4 / 3)) * x[:, 0] ** 2
+            + x[:, 0] * x[:, 1]
+            + (-4 + 4 * x[:, 1] ** 2) * x[:, 1] ** 2
+            + 1.0316
+            + 1e-4
+        )
         return val.ravel()
 
 
-class modHartman6:
-    """log(Hartman6) 6-dimensional test problem.
+class SixHumpCamel:
+    """
+    Six-Hump Camel Function
+    See: http://www.sfu.ca/~ssurjano/camel6.html
+
+    .. math::
+        f(x)= (4 - 2.1 x_1^2 + (x_1^4 / 3)) x_1^2 + x_1 x_2
+              + (-4 + 4 x_2^2) x_2^2
+    """
+
+    def __init__(self):
+        self.dim = 2
+        self.lb = np.array([-3.0, -2.0])
+        self.ub = np.array([3.0, 2.0])
+
+        # optimum value(s)
+        self.xopt = np.array([[0.0898, -0.7126], [-0.0898, 0.7126]])
+        self.yopt = self.__call__(self.xopt[0, :])
+
+        # constraint
+        self.cf = None
+
+    def __call__(self, x):
+        x = np.atleast_2d(x)
+
+        xsqr = np.square(x)
+
+        term1 = (4.0 - 2.1 * xsqr[:, 0] + x[:, 0] ** 4 / 3.0) * xsqr[:, 0]
+        term2 = np.prod(x, axis=1) + (-4.0 + 4.0 * xsqr[:, 1]) * xsqr[:, 1]
+
+        val = term1 + term2
+
+        return val.ravel()
+
+
+class logHartmann6:
+    """log(Hartmann6) 6-dimensional test problem.
     See: https://www.sfu.ca/~ssurjano/hart6.html for the formula.
     """
 
@@ -295,18 +400,27 @@ class modHartman6:
         self.lb = np.zeros(6)
         self.ub = np.ones(6)
 
-        self.A = np.array([[10.0, 3.0, 17.0, 3.5, 1.7, 8.0],
-                           [0.05, 10.0, 17.0, 0.1, 8.0, 14.0],
-                           [3.0, 3.5, 1.7, 10.0, 17.0, 8.0],
-                           [17.0, 8.0, 0.05, 10.0, 0.1, 14.0]])
-        self.P = np.array([[0.1312, 0.1696, 0.5569, 0.0124, 0.8283, 0.5886],
-                           [0.2329, 0.4135, 0.8307, 0.3736, 0.1004, 0.9991],
-                           [0.2348, 0.1451, 0.3522, 0.2883, 0.3047, 0.665],
-                           [0.4047, 0.8828, 0.8732, 0.5743, 0.1091, 0.0381]])
+        self.A = np.array(
+            [
+                [10.0, 3.0, 17.0, 3.5, 1.7, 8.0],
+                [0.05, 10.0, 17.0, 0.1, 8.0, 14.0],
+                [3.0, 3.5, 1.7, 10.0, 17.0, 8.0],
+                [17.0, 8.0, 0.05, 10.0, 0.1, 14.0],
+            ]
+        )
+        self.P = np.array(
+            [
+                [0.1312, 0.1696, 0.5569, 0.0124, 0.8283, 0.5886],
+                [0.2329, 0.4135, 0.8307, 0.3736, 0.1004, 0.9991],
+                [0.2348, 0.1451, 0.3522, 0.2883, 0.3047, 0.665],
+                [0.4047, 0.8828, 0.8732, 0.5743, 0.1091, 0.0381],
+            ]
+        )
         self.alpha = np.array([[1.0], [1.2], [3.0], [3.2]])
 
-        self.xopt = np.array([[0.201690, 0.150011, 0.476874,
-                               0.275332, 0.311652, 0.657300]])
+        self.xopt = np.array(
+            [[0.201690, 0.150011, 0.476874, 0.275332, 0.311652, 0.657300]]
+        )
         self.yopt = -1.20067779
 
         self.cf = None
@@ -317,9 +431,65 @@ class modHartman6:
 
         for i in range(x.shape[0]):
             x_val = x[i, :]
-            B = (x_val[np.newaxis, :] - self.P)**2
-            val[i, :] = -np.log(np.dot(self.alpha.T,
-                                np.exp(-np.diag(np.dot(self.A, B.T)))))
+            B = (x_val[np.newaxis, :] - self.P) ** 2
+            val[i, :] = -np.log(
+                np.dot(self.alpha.T, np.exp(-np.diag(np.dot(self.A, B.T))))
+            )
+
+        return val.ravel()
+
+
+class Hartmann6:
+    """
+    Hartmann 6D Function
+    See: https://www.sfu.ca/~ssurjano/hart6.html for the formula.
+    """
+
+    def __init__(self):
+        self.dim = 6
+        self.lb = np.zeros(self.dim)
+        self.ub = np.ones(self.dim)
+
+        # function parameters
+        self.alpha = np.array([1.0, 1.2, 3.0, 3.2])
+        self.A = np.array(
+            [
+                [10.0, 3.0, 17.0, 3.5, 1.7, 8.0],
+                [0.05, 10.0, 17.0, 0.1, 8.0, 14.0],
+                [3.0, 3.5, 1.7, 10.0, 17.0, 8.0],
+                [17.0, 8.0, 0.05, 10.0, 0.1, 14.0],
+            ]
+        )
+
+        self.P = np.array(
+            [
+                [0.1312, 0.1696, 0.5569, 0.0124, 0.8283, 0.5886],
+                [0.2329, 0.4135, 0.8307, 0.3736, 0.1004, 0.9991],
+                [0.2348, 0.1451, 0.3522, 0.2883, 0.3047, 0.6650],
+                [0.4047, 0.8828, 0.8732, 0.5743, 0.1091, 0.0381],
+            ]
+        )
+
+        # optimum value(s)
+        self.xopt = np.array(
+            [[0.201690, 0.150011, 0.476874, 0.275332, 0.311652, 0.657300]]
+        )
+        self.yopt = self.__call__(self.xopt)
+
+        # constraint
+        self.cf = None
+
+    def __call__(self, x):
+        x = np.atleast_2d(x)
+
+        term1 = np.sum(
+            self.A[np.newaxis, :, :]
+            * (x[:, np.newaxis, :] - self.P[np.newaxis, :, :]) ** 2,
+            axis=2,
+        )
+        term2 = -np.sum(self.alpha[np.newaxis, :] * np.exp(-term1), axis=1)
+
+        val = term2
 
         return val.ravel()
 
@@ -357,8 +527,44 @@ class logGSobol:
 
     def __call__(self, x):
         x = np.atleast_2d(x)
-        val = np.log(np.prod((np.abs(4 * x - 2) + self.a[0]) / (1 + self.a[0]),
-                             axis=1))
+        val = np.log(np.prod((np.abs(4 * x - 2) + self.a[0]) / (1 + self.a[0]), axis=1))
+        return val.ravel()
+
+
+class GSobol:
+    """ 10D gSobol function by González et al. [1]_.
+
+    .. math::
+        f(x)= prod_{i=1}^D (|4 x_i - 2| + a_1) / (1 + a_i)
+
+    where:
+
+    .. math::
+        a_i = 1
+
+    References
+    ----------
+    .. [1] Javier González, Zhenwen Dai, Philipp Hennig, and Neil Lawrence.
+       2016. Batch Bayesian optimization via local penalization.
+       In Proceedings of the 19th International Conference on Artificial
+       Intelligence and Statistics, Vol. 51. PMLR, 648–657.
+    """
+
+    def __init__(self):
+        self.dim = 10
+        self.lb = np.full(self.dim, -5)
+        self.ub = np.full(self.dim, 5)
+
+        self.a = np.ones(self.dim)
+
+        self.xopt = np.full(self.dim, 0.5)
+        self.yopt = self.__call__(self.xopt)
+
+        self.cf = None
+
+    def __call__(self, x):
+        x = np.atleast_2d(x)
+        val = np.prod((np.abs(4 * x - 2) + self.a[0]) / (1 + self.a[0]), axis=1)
         return val.ravel()
 
 
@@ -383,10 +589,44 @@ class logRosenbrock:
 
     def __call__(self, x):
         x = np.atleast_2d(x)
-        last = (x - 1)**2
-        sqr = x**2
-        val = np.log(np.sum(100 * (x[:, 1:] - sqr[:, :-1])**2 + last[:, :-1],
-                            axis=1) + 0.5)
+        last = (x - 1) ** 2
+        sqr = x ** 2
+        val = np.log(
+            np.sum(100 * (x[:, 1:] - sqr[:, :-1]) ** 2 + last[:, :-1], axis=1) + 0.5
+        )
+        return val.ravel()
+
+
+class Rosenbrock:
+    """
+    Rosenbrock Function
+    See: http://www.sfu.ca/~ssurjano/rosen.html
+
+    .. math::
+        f(x) = sum_{i=1}^{d-1} (100 (x_{i+1} - x_i^2)^2 + (x_i - 1)^2)
+    """
+
+    def __init__(self):
+        self.dim = 10
+        self.lb = np.full(self.dim, -5.0)
+        self.ub = np.full(self.dim, 10.0)
+
+        # optimum value(s)
+        self.xopt = np.ones(self.dim)
+        self.yopt = self.__call__(self.xopt)
+
+        # constraint
+        self.cf = None
+
+    def __call__(self, x):
+        x = np.atleast_2d(x)
+
+        term1 = 100.0 * (x[:, 1:] - x[:, :-1] ** 2) ** 2
+        term2 = (x[:, :-1] - 1) ** 2
+        term3 = np.sum(term1 + term2, axis=1)
+
+        val = term3
+
         return val.ravel()
 
 
@@ -397,6 +637,7 @@ class logStyblinskiTang:
     .. math::
         f(x) = log( (1/2) sum_{i=1}^D (x_i^4 - 16 x_i^2 + 5 x_i) + 400)
     """
+
     def __init__(self):
         self.dim = 10
         self.lb = np.full(self.dim, -5)
@@ -409,6 +650,32 @@ class logStyblinskiTang:
 
     def __call__(self, x):
         x = np.atleast_2d(x)
-        val = np.log(0.5 * np.sum(x**4 - 16 * x**2 + 5 * x, axis=1)
-                     + (40 * 10))
+        val = np.log(0.5 * np.sum(x ** 4 - 16 * x ** 2 + 5 * x, axis=1) + (40 * 10))
+        return val.ravel()
+
+
+class StyblinskiTang:
+    """
+    Styblinski-Tang Function
+    See: http://www.sfu.ca/~ssurjano/stybtang.html
+    """
+
+    def __init__(self):
+        self.dim = 10
+        self.lb = np.full(self.dim, -5.0)
+        self.ub = np.full(self.dim, 5.0)
+
+        # optimum value(s)
+        self.xopt = np.full(self.dim, -2.903534)
+        self.yopt = self.__call__(self.xopt)
+
+        # constraint
+        self.cf = None
+
+    def __call__(self, x):
+        x = np.atleast_2d(x)
+
+        term1 = x ** 4 - 16.0 * x ** 2 + 5.0 * x
+        val = 0.5 * np.sum(term1, axis=1)
+
         return val.ravel()

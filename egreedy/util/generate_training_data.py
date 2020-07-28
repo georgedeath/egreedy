@@ -9,8 +9,9 @@ import numpy as np
 from .. import test_problems
 
 
-def generate_training_data_LHS(problem_name, n_exp_start=1, n_exp_end=51,
-                               N_samples=None, optional_arguments={}):
+def generate_training_data_LHS(
+    problem_name, n_exp_start=1, n_exp_end=51, N_samples=None, optional_arguments={}
+):
     """Generates training data for a given problem with (optional) arguments.
 
     This function generates training data for a specific test problem using
@@ -73,8 +74,10 @@ def generate_training_data_LHS(problem_name, n_exp_start=1, n_exp_end=51,
     # check that there are the same number of arguments as there are
     # experimental training data to construct
     for _, v in optional_arguments.items():
-        assert len(v) == N, "There should be as many elements for each " \
-                            "optional arguments as there are experimental runs"
+        assert len(v) == N, (
+            "There should be as many elements for each "
+            "optional arguments as there are experimental runs"
+        )
 
     # get the function class
     f_class = getattr(test_problems, problem_name)
@@ -90,19 +93,18 @@ def generate_training_data_LHS(problem_name, n_exp_start=1, n_exp_end=51,
         N_samples = 2 * f.dim if N_samples is None else N_samples
 
         # LHS and rescale to decision space
-        Xtr = (f.ub - f.lb) * lhs(f.dim, N_samples, criterion='maximin') + f.lb
+        Xtr = (f.ub - f.lb) * lhs(f.dim, N_samples, criterion="maximin") + f.lb
 
         # evaluate the function and reshape to (N_samples, 1)
         Ytr = np.reshape(f(Xtr), (-1, 1))
 
         # save the results
-        fn = f'training_data/{problem_name:s}_{exp_no:d}.npz'
+        fn = f"training_data/{problem_name:s}_{exp_no:d}.npz"
         np.savez(fn, Xtr, Ytr, opt_args)
-        print('Saved: {:s}'.format(fn))
+        print("Saved: {:s}".format(fn))
 
 
-def generate_training_data_PitzDaily(n_exp_start=1, n_exp_end=51,
-                                     N_samples=20):
+def generate_training_data_PitzDaily(n_exp_start=1, n_exp_end=51, N_samples=20):
     """Generates training data the PitzDaily test problem.
 
     Samples are generated uniformly, rather than with LHS, because the
@@ -144,18 +146,18 @@ def generate_training_data_PitzDaily(n_exp_start=1, n_exp_end=51,
         Xtr = np.zeros((N_samples, 10))
         Ytr = np.zeros((N_samples, 1))
 
-        fn = f'training_data/PitzDaily_{exp_no:d}.npz'
-        print('Generating data: {:s}'.format(fn))
+        fn = f"training_data/PitzDaily_{exp_no:d}.npz"
+        print("Generating data: {:s}".format(fn))
 
         # generate and evaluate solutions that do not violate the constraint
         # function
         for i in range(N_samples):
             Xtr[i] = f.generate_valid_solution()
             Ytr[i] = f(Xtr[i])
-            print('\tFinished {:d}/{:d}'.format(i + 1, N_samples))
+            print("\tFinished {:d}/{:d}".format(i + 1, N_samples))
 
         np.savez(fn, Xtr, Ytr, {})
-        print('Saved: {:s}\n'.format(fn))
+        print("Saved: {:s}\n".format(fn))
 
 
 def generate_push4_targets(N):
@@ -181,7 +183,7 @@ def generate_push4_targets(N):
     T_ub = np.array([5, 5])
 
     # LHS sample and rescale from [0, 1]^2 to the bounds above
-    T = lhs(2, N, criterion='maximin') * (T_ub - T_lb) + T_lb
+    T = lhs(2, N, criterion="maximin") * (T_ub - T_lb) + T_lb
 
     T1_x, T1_y = T.T
     return T1_x, T1_y
@@ -234,16 +236,13 @@ def generate_push8_targets(N):
 if __name__ == "__main__":
     # how to generate push4 training data:
     T1_x, T1_y = generate_push4_targets(51)
-    push4_targets = {'t1_x': T1_x, 't1_y': T1_y}
-    generate_training_data_LHS('push4', 1, 51,
-                               optional_arguments=push4_targets)
+    push4_targets = {"t1_x": T1_x, "t1_y": T1_y}
+    generate_training_data_LHS("push4", 1, 51, optional_arguments=push4_targets)
 
     # how to generate push8 training data:
     T1_x, T1_y, T2_x, T2_y = generate_push8_targets(51)
-    push8_targets = {'t1_x': T1_x, 't1_y': T1_y,
-                     't2_x': T2_x, 't2_y': T2_y}
-    generate_training_data_LHS('push8', 1, 51,
-                               optional_arguments=push8_targets)
+    push8_targets = {"t1_x": T1_x, "t1_y": T1_y, "t2_x": T2_x, "t2_y": T2_y}
+    generate_training_data_LHS("push8", 1, 51, optional_arguments=push8_targets)
 
     # how to generate generate data for the synthetic test problems
-    generate_training_data_LHS('WangFreitas', 1, 51)
+    generate_training_data_LHS("WangFreitas", 1, 51)

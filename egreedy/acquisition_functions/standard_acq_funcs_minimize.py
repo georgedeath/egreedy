@@ -110,8 +110,7 @@ def PI(mu, sigma, y_best, phi=norm.pdf):
     return pi
 
 
-def UCB(mu, sigma, lb, ub, t, d, beta='theorem2',
-        sizeD=1000, a=1, b=1, B=10):
+def UCB(mu, sigma, lb, ub, t, d, beta="theorem2", sizeD=1000, a=1, b=1, B=10):
     """The Upper Confidence Bound (UCB) acquisition function.
 
     First proposed by Lai and Robbins [1]_, with convergence proofs given
@@ -170,22 +169,21 @@ def UCB(mu, sigma, lb, ub, t, d, beta='theorem2',
     """
     delta = 0.01  # as specified in section 6 of [2].
 
-    if beta == 'theorem1':
+    if beta == "theorem1":
         # Theorem 1 - Bounded and finite D
-        beta = 2 * np.log(sizeD * t**2 + np.pi**2 / (6 * delta))
+        beta = 2 * np.log(sizeD * t ** 2 + np.pi ** 2 / (6 * delta))
 
-    elif beta == 'theorem2':
+    elif beta == "theorem2":
         # Theorem 2 - Bounded and infinite D - f sampled from GP
         r = np.max(ub - lb)
 
-        beta = (2 * np.log(t**2 * 2 * np.pi**2 / (3 * delta))
-                + 2 * d * np.log(t**2 * d * b * r
-                                 * np.sqrt(np.log(4 * d * a / delta)))
-                )
-    elif beta == 'theorem3':
+        beta = 2 * np.log(t ** 2 * 2 * np.pi ** 2 / (3 * delta)) + 2 * d * np.log(
+            t ** 2 * d * b * r * np.sqrt(np.log(4 * d * a / delta))
+        )
+    elif beta == "theorem3":
         # Theorem 3 - Bounded and infinite D - f bounded RKHS
-        gamma = np.log(t)**(d + 1)
-        beta = 2 * B + 300 * gamma * np.log(t / delta)**3
+        gamma = np.log(t) ** (d + 1)
+        beta = 2 * B + 300 * gamma * np.log(t / delta) ** 3
 
     # else we use the given beta value
     return -(mu - np.sqrt(beta) * sigma)

@@ -8,14 +8,16 @@ import GPy as gp
 from . import acquisition_functions, test_problems
 
 
-def perform_experiment(problem_name,
-                       run_no,
-                       acquisition_name,
-                       acquisition_args={},
-                       budget=250,
-                       continue_runs=False,
-                       verbose=False,
-                       save=True):
+def perform_experiment(
+    problem_name,
+    run_no,
+    acquisition_name,
+    acquisition_args={},
+    budget=250,
+    continue_runs=False,
+    verbose=False,
+    save=True,
+):
     r"""Performs a Bayesian optimisation experiment.
 
     Performs Bayesian optimisation on a specified problem with given
@@ -115,12 +117,12 @@ def perform_experiment(problem_name,
     ...
     """
     # paths to data
-    data_file = f'training_data/{problem_name:}_{run_no:}.npz'
-    save_file = f'results/{problem_name:}_{run_no:}_{budget:}_{acquisition_name:}'
+    data_file = f"training_data/{problem_name:}_{run_no:}.npz"
+    save_file = f"results/{problem_name:}_{run_no:}_{budget:}_{acquisition_name:}"
 
-    if 'epsilon' in acquisition_args:
-        save_file += '_eps{:g}'.format(acquisition_args['epsilon'])
-    save_file += '.npz'
+    if "epsilon" in acquisition_args:
+        save_file += "_eps{:g}".format(acquisition_args["epsilon"])
+    save_file += ".npz"
 
     # if the file we're going to be saving to already exists
     if os.path.exists(save_file):
@@ -129,30 +131,30 @@ def perform_experiment(problem_name,
         if continue_runs:
             # load the previously saved data
             with np.load(save_file, allow_pickle=True) as data:
-                Xtr = data['Xtr']
-                Ytr = data['Ytr']
+                Xtr = data["Xtr"]
+                Ytr = data["Ytr"]
 
-            _print('Continuing saved run from: {:s}'.format(save_file),
-                   verbose)
+            _print("Continuing saved run from: {:s}".format(save_file), verbose)
 
         # if we weren't expecting saved data to be there, raise an exception
         # instead of overwriting it
         else:
-            raise ValueError('Saved data found but continue_runs not set: '
-                             '{:s}'.format(save_file))
+            raise ValueError(
+                "Saved data found but continue_runs not set: {:s}".format(save_file)
+            )
 
     # else just load the training data
     else:
         with np.load(data_file, allow_pickle=True) as data:
-            Xtr = data['arr_0']
-            Ytr = data['arr_1']
+            Xtr = data["arr_0"]
+            Ytr = data["arr_1"]
 
-        _print('Loaded training data from: {:s}'.format(data_file), verbose)
+        _print("Loaded training data from: {:s}".format(data_file), verbose)
 
     # load the function's optional arguments, if there are any
     with np.load(data_file, allow_pickle=True) as data:
-        if 'arr_2' in data:
-            f_optional_arguments = data['arr_2'].item()
+        if "arr_2" in data:
+            f_optional_arguments = data["arr_2"].item()
         else:
             f_optional_arguments = {}
 
@@ -164,22 +166,24 @@ def perform_experiment(problem_name,
     f_cf = f.cf
     f_dim = f.dim
 
-    _print('Loaded test problem: {:s}'.format(problem_name), verbose)
+    _print("Loaded test problem: {:s}".format(problem_name), verbose)
     if f_optional_arguments:
-        _print('\twith optional arguments: {:}'.format(f_optional_arguments),
-               verbose)
+        _print("\twith optional arguments: {:}".format(f_optional_arguments), verbose)
 
     # load the acquisition function
     acq_budget = 5000 * f_dim
     acq_class = getattr(acquisition_functions, acquisition_name)
-    acq_func = acq_class(lb=f_lb, ub=f_ub, cf=f_cf, acq_budget=acq_budget,
-                         acquisition_args=acquisition_args)
+    acq_func = acq_class(
+        lb=f_lb,
+        ub=f_ub,
+        cf=f_cf,
+        acq_budget=acq_budget,
+        acquisition_args=acquisition_args,
+    )
 
-    _print('Using acquisition function: {:s}'.format(acquisition_name),
-           verbose)
+    _print("Using acquisition function: {:s}".format(acquisition_name), verbose)
     if acquisition_args:
-        _print('\twith optional arguments: {:}'.format(acquisition_args),
-               verbose)
+        _print("\twith optional arguments: {:}".format(acquisition_args), verbose)
 
     # perform the Bayesian optimisation loop
     while Xtr.shape[0] < budget:
@@ -193,10 +197,10 @@ def perform_experiment(problem_name,
         if save:
             np.savez(save_file, Xtr=Xtr, Ytr=Ytr)
 
-        _print('Best function value so far: {:g}'.format(np.min(Ytr)), verbose)
-        _print('', verbose)
+        _print("Best function value so far: {:g}".format(np.min(Ytr)), verbose)
+        _print("", verbose)
 
-    _print('Finished optimisation run', verbose)
+    _print("Finished optimisation run", verbose)
 
 
 def perform_BO_iteration(Xtr, Ytr, f, acq_func, verbose=False):
@@ -250,50 +254,53 @@ def perform_BO_iteration(Xtr, Ytr, f, acq_func, verbose=False):
 
     while N_FAILED < MAX_FAILED:
         try:
-            _print('Training a GP model with '
-                   '{:d} data points.'.format(Xtr.shape[0]), verbose)
+            _print(
+                "Training a GP model with " "{:d} data points.".format(Xtr.shape[0]),
+                verbose,
+            )
 
             # create a gp model with the training data and fit it
             kernel = gp.kern.Matern52(input_dim=Xtr.shape[1], ARD=False)
             model = gp.models.GPRegression(Xtr, Ytr, kernel, normalizer=False)
 
-            model.constrain_positive('')
-            (kern_variance, kern_lengthscale,
-             gaussian_noise) = model.parameter_names()
+            model.constrain_positive("")
+            (kern_variance, kern_lengthscale, gaussian_noise) = model.parameter_names()
             model[kern_variance].constrain_bounded(1e-6, 1e6, warning=False)
             model[kern_lengthscale].constrain_bounded(1e-6, 1e6, warning=False)
             model[gaussian_noise].constrain_fixed(1e-6, warning=False)
 
-            model.optimize_restarts(optimizer='lbfgs',
-                                    num_restarts=10,
-                                    num_processes=1,
-                                    verbose=False)
+            model.optimize_restarts(
+                optimizer="lbfgs", num_restarts=10, num_processes=1, verbose=False
+            )
 
             # optimise the acquisition function to get a new point to evaluate
-            _print('Optimising the acquisition function.', verbose)
+            _print("Optimising the acquisition function.", verbose)
             Xnew = acq_func(model)
 
             # expensively evaluate it
-            _print('Expensively evaluating the new selected location.',
-                   verbose)
+            _print("Expensively evaluating the new selected location.", verbose)
             Ynew = f(Xnew)
 
-            _print('New location  : {:}'.format(Xnew.ravel()), verbose)
-            _print('Function value: {:g}'.format(Ynew.flat[0]), verbose)
+            _print("New location  : {:}".format(Xnew.ravel()), verbose)
+            _print("Function value: {:g}".format(Ynew.flat[0]), verbose)
 
             return Xnew, Ynew, model
 
         except KeyboardInterrupt:
-            _print('Interrupted with CTRL+C - stopping run', verbose)
+            _print("Interrupted with CTRL+C - stopping run", verbose)
             raise
 
         except:
-            _print('Something failed on Attempt '
-                   + '{:d}/{:d}'.format(N_FAILED + 1, MAX_FAILED), verbose)
+            _print(
+                "Something failed on Attempt "
+                + "{:d}/{:d}".format(N_FAILED + 1, MAX_FAILED),
+                verbose,
+            )
             N_FAILED += 1
 
-    raise RuntimeError('The optimiser was unable to find a valid '
-                       + 'location to evaluate')
+    raise RuntimeError(
+        "The optimiser was unable to find a valid " + "location to evaluate"
+    )
 
 
 def _print(s, verbose=False):
@@ -311,11 +318,12 @@ def _print(s, verbose=False):
 
 
 if __name__ == "__main__":
-    perform_experiment('Branin',  # problem name
-                       1,  # problem instance (LHS samples and optional args)
-                       'eFront',  # method name
-                       verbose=True,  # print status
-                       continue_runs=False,  # resume runs
-                       save=False,  # whether to save the run
-                       acquisition_args={'epsilon': 0.1}  # acq func args
-                       )
+    perform_experiment(
+        "Branin",  # problem name
+        1,  # problem instance (LHS samples and optional args)
+        "eFront",  # method name
+        verbose=True,  # print status
+        continue_runs=False,  # resume runs
+        save=False,  # whether to save the run
+        acquisition_args={"epsilon": 0.1},  # acq func args
+    )

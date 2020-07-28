@@ -39,15 +39,15 @@ def perform_LHS_runs(problem_name, budget=250, n_exp_start=1, n_exp_end=51):
 
     for exp_no in exp_nos:
         # paths to data
-        data_file = f'training_data/{problem_name:}_{exp_no:}.npz'
-        save_file = f'results/{problem_name:}_{exp_no:}_{budget:}_LHS'
+        data_file = f"training_data/{problem_name:}_{exp_no:}.npz"
+        save_file = f"results/{problem_name:}_{exp_no:}_{budget:}_LHS"
 
         # load the initial LHS locations
         with np.load(data_file, allow_pickle=True) as data:
-            Xtr = data['arr_0']
-            Ytr = data['arr_1']
-            if 'arr_2' in data:
-                f_optional_arguments = data['arr_2'].item()
+            Xtr = data["arr_0"]
+            Ytr = data["arr_1"]
+            if "arr_2" in data:
+                f_optional_arguments = data["arr_2"].item()
             else:
                 f_optional_arguments = {}
 
@@ -61,7 +61,7 @@ def perform_LHS_runs(problem_name, budget=250, n_exp_start=1, n_exp_end=51):
         N_samples = budget - Xtr.shape[0]
 
         # LHS, rescale to decision space and evaluate
-        _X = (f_ub - f_lb) * lhs(f_dim, N_samples, criterion='maximin') + f_lb
+        _X = (f_ub - f_lb) * lhs(f_dim, N_samples, criterion="maximin") + f_lb
         _Y = np.reshape(f(_X), (N_samples, 1))
 
         # combine with the training data and save
@@ -69,11 +69,10 @@ def perform_LHS_runs(problem_name, budget=250, n_exp_start=1, n_exp_end=51):
         Ytr = np.concatenate((Ytr, np.atleast_2d(_Y)))
         np.savez(save_file, Xtr=Xtr, Ytr=Ytr)
 
-        print('Generated samples: {:s}'.format(save_file))
+        print("Generated samples: {:s}".format(save_file))
 
 
-def perform_uniform_runs(problem_name, budget=250, n_exp_start=1,
-                         n_exp_end=51):
+def perform_uniform_runs(problem_name, budget=250, n_exp_start=1, n_exp_end=51):
     """Generates the uniformly distributed samples for a fixed budget.
 
     Generates a fixed budget of uniformly distributed samples (inclusive of
@@ -109,15 +108,15 @@ def perform_uniform_runs(problem_name, budget=250, n_exp_start=1,
 
     for exp_no in exp_nos:
         # paths to data
-        data_file = f'training_data/{problem_name:}_{exp_no:}.npz'
-        save_file = f'results/{problem_name:}_{exp_no:}_{budget:}_UNIFORM'
+        data_file = f"training_data/{problem_name:}_{exp_no:}.npz"
+        save_file = f"results/{problem_name:}_{exp_no:}_{budget:}_UNIFORM"
 
         # load the initial training data locations
         with np.load(data_file, allow_pickle=True) as data:
-            Xtr = data['arr_0']
-            Ytr = data['arr_1']
-            if 'arr_2' in data:
-                f_optional_arguments = data['arr_2'].item()
+            Xtr = data["arr_0"]
+            Ytr = data["arr_1"]
+            if "arr_2" in data:
+                f_optional_arguments = data["arr_2"].item()
             else:
                 f_optional_arguments = {}
 
@@ -150,4 +149,4 @@ def perform_uniform_runs(problem_name, budget=250, n_exp_start=1,
         Ytr = np.concatenate((Ytr, np.atleast_2d(Ynew)))
         np.savez(save_file, Xtr=Xtr, Ytr=Ytr)
 
-        print('Generated samples: {:s}'.format(save_file))
+        print("Generated samples: {:s}".format(save_file))

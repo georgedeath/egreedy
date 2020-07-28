@@ -76,6 +76,7 @@ class push4:
     >> f(x)
     array([9.0733461])
     """
+
     def __init__(self, t1_x=0, t1_y=0):
         self.dim = 4
         self.lb = np.zeros(self.dim)
@@ -105,10 +106,9 @@ class push4:
 
         val = np.zeros((x.shape[0], 1))
         for i in range(x.shape[0]):
-            val[i, :] = push_4D(x[i, :],
-                                self.t1_x, self.t1_y,
-                                self.o1_x, self.o1_y,
-                                plotting_args)
+            val[i, :] = push_4D(
+                x[i, :], self.t1_x, self.t1_y, self.o1_x, self.o1_y, plotting_args
+            )
 
         return val.ravel()
 
@@ -144,15 +144,16 @@ class push8:
     >> f(x)
     array([24.15719287])
     """
+
     def __init__(self, t1_x=-5, t1_y=-5, t2_x=5, t2_y=5):
         self.dim = 8
         self.lb = np.zeros(self.dim)
         self.ub = np.ones(self.dim)
 
-        self.lb_orig = np.array([-5.0, -5.0, 1.0, 0,
-                                 -5.0, -5.0, 1.0, 0])
-        self.ub_orig = np.array([5.0, 5.0, 300.0, 2 * np.pi,
-                                 5.0, 5.0, 300.0, 2 * np.pi])
+        self.lb_orig = np.array([-5.0, -5.0, 1.0, 0, -5.0, -5.0, 1.0, 0])
+        self.ub_orig = np.array(
+            [5.0, 5.0, 300.0, 2 * np.pi, 5.0, 5.0, 300.0, 2 * np.pi]
+        )
 
         # object target locations
         self.t1_x = t1_x
@@ -179,11 +180,17 @@ class push8:
 
         val = np.zeros((x.shape[0], 1))
         for i in range(x.shape[0]):
-            val[i, :] = push_8D(x[i, :],
-                                self.t1_x, self.t1_y,
-                                self.t2_x, self.t2_y,
-                                self.o1_x, self.o1_y,
-                                self.o2_x, self.o2_y,
-                                plotting_args)
+            val[i, :] = push_8D(
+                x[i, :],
+                self.t1_x,
+                self.t1_y,
+                self.t2_x,
+                self.t2_y,
+                self.o1_x,
+                self.o1_y,
+                self.o2_x,
+                self.o2_y,
+                plotting_args,
+            )
 
         return val.ravel()

@@ -4,3 +4,4 @@ DockerFile
 __pycache__*
 .ipynb_checkpoints
 results_10k
+.vscode
