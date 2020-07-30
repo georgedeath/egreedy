@@ -16,9 +16,10 @@ by the optimiser; e.g. for the UCB acquisition function the value of beta is
 needed and can be specified: args = {'beta': 2.5}.
 
 Note that all acquisition optimisers use the NSGA-II algorithm apart from PI
-which uses DIRECT.
+which uses a multi-restart strategy, seeded by the best locations found from
+uniformly sampling decision space.
 """
-import nlopt
+import scipy
 import numpy as np
 
 from . import standard_acq_funcs_minimize
@@ -186,21 +187,29 @@ class Exploit(ParetoFrontOptimiser):
 
 
 class PI(BaseOptimiser):
-    """Maximises PI acquisition function for a given GPy model.
+    """Maximises the PI acquisition function for a given GPy model.
 
     See standard_acq_funcs_minimize.PI for details of the PI method.
 
     Notes
     -----
-    PI is maximised using DIRECT because the point that maximises PI is not
-    guaranteed to be on the Pareto front - see the paper for full details.
+    PI is maximised using the typical multi-restart approach of drawing a
+    large number of samples from across the decision space (X), evaluating the
+    locations with the acquisition function, and locally optimising the best 10
+    of these with L-BFGS-B. Here we make the assumption that each local
+    optimisation run will take ~100 evaluations -- emperically we found this to
+    be the case.
+
+    PI is not maximised using NSGA-II because the location that maximises PI is
+    not guaranteed to be on the Pareto front; see the paper for full details.
     """
 
     def __call__(self, model):
         D = model.X.shape[1]
         incumbent = model.Y.min()
 
-        def min_obj(x, grad):
+        # objective function wrapper for L-BFGS-B
+        def min_obj(x):
             # if we have a constraint function and it is violated,
             # return a bad PI value
             if (self.cf is not None) and (not self.cf(x)):
@@ -208,28 +217,47 @@ class PI(BaseOptimiser):
 
             mu, sigmaSQR = model.predict(np.atleast_2d(x), full_cov=False)
 
-            # negate PI as DIRECT minimises so we want the largest negative PI
-            r = -standard_acq_funcs_minimize.PI(mu, np.sqrt(sigmaSQR), incumbent).flat[
-                0
-            ]
-            return r
+            # negate PI because we're using a minimiser
+            pi = -standard_acq_funcs_minimize.PI(
+                mu, np.sqrt(sigmaSQR), incumbent
+            ).ravel()
+            return pi
 
-        # define a direct optimisation instance
-        opt = nlopt.opt(nlopt.GN_DIRECT_L_RAND, D)
-        opt.set_min_objective(min_obj)
+        # number of optimisation runs and *estimated* number of L-BFGS-B
+        # function evaluations per run; note this was calculate empirically and
+        # may not be true for all functions.
+        N_opt_runs = 10
+        fevals_assumed_per_run = 100
 
-        # problem bounds
-        opt.set_lower_bounds(self.lb)
-        opt.set_upper_bounds(self.ub)
+        N_samples = self.acq_budget - (N_opt_runs * fevals_assumed_per_run)
+        if N_samples <= N_opt_runs:
+            N_samples = N_opt_runs
 
-        # budget and function tolerance
-        opt.set_maxeval(self.acq_budget)
-        opt.set_ftol_abs(1e-6)
+        # initially perform a grid search for N_samples
+        x0_points = np.random.uniform(self.lb, self.ub, size=(N_samples, D))
+        fx0 = min_obj(x0_points).ravel()
 
-        # initial random location
-        x0 = np.random.uniform(low=self.lb, high=self.ub)
+        # select the top N_opt_runs to evaluate with L-BFGS-B
+        x0_points = x0_points[np.argsort(fx0)[:N_opt_runs], :]
 
-        # run DIRECT
-        xopt = opt.optimize(x0)
+        # Find the best optimum by starting from n_restart different random points.
+        # below is equivilent to: [(l, b) for (l, b) in zip(self.lb, self.ub)]
+        bounds = [*zip(self.lb, self.ub)]
 
-        return xopt
+        # storage for the best found location (xb) and its function value (fx)
+        xb = np.zeros((N_opt_runs, D))
+        fx = np.zeros((N_opt_runs, 1))
+
+        # ensure we're using a good stopping criterion
+        # ftol = factr * numpy.finfo(float).eps
+        factr = 1e-15 / np.finfo(float).eps
+
+        # run L-BFGS-B on each of the 'N_opt_runs' starting locations
+        for i, x0 in enumerate(x0_points):
+            xb[i, :], fx[i, :], _ = scipy.optimize.fmin_l_bfgs_b(
+                min_obj, x0=x0, bounds=bounds, approx_grad=True, factr=factr
+            )
+
+        # return the best location
+        best_idx = np.argmin(fx.flat)
+        return xb[best_idx, :]
