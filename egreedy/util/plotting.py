@@ -12,6 +12,12 @@ from statsmodels.stats.multitest import multipletests
 from .. import test_problems
 
 
+def get_colors(crange, cmap_name="rainbow"):
+    """Returns the named colour map"""
+    cmap = getattr(plt.cm, cmap_name)
+    return cmap(crange)
+
+
 def process_results(
     results_dir, problem_names, method_names, budget=250, exp_no_start=1, exp_no_end=51
 ):
@@ -122,7 +128,7 @@ def plot_convergence(
             D["col_idx"].append(method_to_col[method_name])
 
         # create total colour range
-        colors = plt.cm.rainbow(np.linspace(0, 1, col_counter))
+        colors = get_colors(np.linspace(0, 1, col_counter))
 
         # plot!
         fig, ax = plt.subplots(1, 1, figsize=(8, 5), sharey=False)
@@ -244,7 +250,7 @@ def plot_convergence_combined(
             D["col_idx"].append(method_to_col[method_name])
 
         # create total colour range
-        colors = plt.cm.rainbow(np.linspace(0, 1, col_counter))
+        colors = get_colors(np.linspace(0, 1, col_counter))
 
         # only the bottom row should have x-axis labels
         if problem_name in problem_names[-2:]:
@@ -315,13 +321,13 @@ def results_plot_maker(
     for c, x, Y, Y_lbl in zip(col_idx, xvals, yvals, y_labels):
         color = colors[c]
 
-        # calculate median run and upper/lower percentils
+        # calculate median run and upper/lower percentiles
         bot, mid, top = np.percentile(Y, [25, 50, 75], axis=0)
 
         if use_fill_between:
             ax.fill_between(x, bot.flat, top.flat, color=color, alpha=0.25)
 
-        ax.plot(x, mid, color=color, label="{:s}".format(Y_lbl))
+        ax.plot(x, mid, color=color, label="{:s}".format(Y_lbl), lw=2)
         ax.plot(x, bot.flat, "--", color=color, alpha=0.25)
         ax.plot(x, top.flat, "--", color=color, alpha=0.25)
 
@@ -381,7 +387,7 @@ def plot_boxplots(
             D["col_idx"].append(method_to_col[method_name])
 
         # create total colour range
-        colors = plt.cm.rainbow(np.linspace(0, 1, col_counter))
+        colors = get_colors(np.linspace(0, 1, col_counter))
 
         # plot!
         fig, ax = plt.subplots(1, 3, figsize=(16, 3), sharey=True)
@@ -496,7 +502,7 @@ def plot_boxplots_combined(
             D["col_idx"].append(method_to_col[method_name])
 
         # create total colour range
-        colors = plt.cm.rainbow(np.linspace(0, 1, col_counter))
+        colors = get_colors(np.linspace(0, 1, col_counter))
 
         for i, (aa, budget) in enumerate(zip(a, budgets)):
             YV = [Y[:, :budget] for Y in D["yvals"]]
