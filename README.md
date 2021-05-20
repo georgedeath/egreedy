@@ -8,11 +8,9 @@ Alma A. M. Rahat, S <sup>2</sup>, Jonathan E. Fieldsend <sup>1</sup>**
 
 This repository contains the Python3 code for the ε-greedy strategies presented
 in:
-> George De Ath, Richard M. Everson, Alma A. M. Rahat,
-and Jonathan E. Fieldsend. 2020. Greed is Good: Exploration and Exploitation
-Trade-offs in Bayesian Optimisation, to appear in ACM Transactions on
-Evolutionary Learning and Optimization (TELO).</br>
-> **Preprint:** <https://arxiv.org/abs/1911.12809>
+> George De Ath, Richard M. Everson, Alma A. M. Rahat, and Jonathan E. Fieldsend. 2021. Greed Is Good: Exploration and Exploitation Trade-offs in Bayesian Optimisation. ACM Trans. Evol. Learn. Optim. 1, 1, Article 1 (May 2021), 22 pages.
+<br/>> **Paper:** <https://doi.org/10.1145/3425501>
+<br/>> **Preprint:** <https://arxiv.org/abs/1911.12809>
 
 The repository also contains all training data used for the initialisation of
 each of the 51 optimisation runs carried to evaluate each method, the
@@ -34,14 +32,18 @@ system: [docker](#installation-docker) / [manual](#installation-manual)
 ## Citation
 
 If you use any part of this code in your work, please cite our
-[Arxiv paper](https://arxiv.org/abs/1911.12809):
+[ACM TELO paper](https://doi.org/10.1145/3425501>):
 
 ```bibtex
-@misc{death:egreedy,
-    title = {Greed is Good: Exploration and Exploitation Trade-offs in Bayesian Optimisation},
-    author = {George {De Ath} and Richard M. Everson and Alma A. M. Rahat and Jonathan E. Fieldsend},
-    year = {2019},
-    eprint = {arXiv:1911.12809}
+@article{death:egreedy:2021,
+  title     = {Greed is Good: Exploration and Exploitation Trade-offs in {B}ayesian Optimisation},
+  author    = {George {De Ath} and Richard M. Everson and Alma A. M. Rahat and Jonathan E. Fieldsend},
+  year      = {2021},
+  journal   = {ACM Transactions on Evolutionary Learning and Optimization},
+  volume    = {1},
+  number    = {1},
+  publisher = {Association for Computing Machinery},
+  address   = {New York}
 }
 ```
 
